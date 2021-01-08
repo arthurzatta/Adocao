@@ -1,1 +1,3 @@
-![logotipo](https://github.com/arthurzatta/Adocao/blob/main/.github/logotipo.png)
+<h1 align="center">
+    <img alt="" title="" src=".github/logotipo.png">
+</h1>
