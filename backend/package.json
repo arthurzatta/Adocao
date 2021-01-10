@@ -3,12 +3,22 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "start": "nodemon src/server.js",
+    "debug": "nodemon --inspect src/server.js"
+  },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.3.5"
   },
   "devDependencies": {
     "eslint": "^7.17.0",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1"
+    "eslint-plugin-import": "^2.22.1",
+    "nodemon": "^2.0.7",
+    "sequelize-cli": "^6.2.0",
+    "sucrase": "^3.17.0"
   }
 }
