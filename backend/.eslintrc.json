@@ -15,6 +15,9 @@
         "sourceType": "module"
     },
     "rules": {
+      "class-methods-use-this": "off",
+      "no-params-reassign": "off",
+      "no-unused-vars": ["error", {"argsIgnorePattern": "next"}],
       "import/extensions" :[
         "error",
         "ignorePackages",
