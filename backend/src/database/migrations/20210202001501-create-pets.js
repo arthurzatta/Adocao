@@ -1,5 +1,5 @@
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: (queryInterface, Sequelize) => {
     queryInterface.createTable('pets', {
       id: {
         type: Sequelize.INTEGER,
@@ -11,8 +11,20 @@ module.exports = {
         allowNull: false,
       },
       description: Sequelize.STRING,
-      photo: Sequelize.STRING,
+      image: Sequelize.STRING,
       sex: Sequelize.CHAR(1),
+      latitude: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      longitude: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      is_lost: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
       id_user: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -32,7 +44,5 @@ module.exports = {
     });
   },
 
-  down: async (queryInterface, Sequelize) => {
-    queryInterface.dropTable('pets');
-  },
+  down: (queryInterface) => queryInterface.dropTable('pets'),
 };

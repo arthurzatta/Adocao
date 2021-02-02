@@ -5,12 +5,9 @@ module.exports = {
       allowNull: false,
       primaryKey: true,
     },
-    isLost: {
-      type: Sequelize.BOOLEAN,
-      allowNull: true,
-    },
     id_user: {
       type: Sequelize.INTEGER,
+      allowNull: false,
       references: {
         model: 'users',
         key: 'id',
@@ -18,6 +15,7 @@ module.exports = {
     },
     id_pet: {
       type: Sequelize.INTEGER,
+      allowNull: false,
       references: {
         model: 'pets',
         key: 'id',
@@ -25,7 +23,5 @@ module.exports = {
     },
   }),
 
-  down: (queryInterface, Sequelize) => {
-    queryInterface.dropTable('favorites');
-  },
+  down: (queryInterface) => queryInterface.dropTable('favorites'),
 };

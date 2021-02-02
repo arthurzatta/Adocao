@@ -17,7 +17,7 @@ module.exports = {
     },
     phone: {
       type: Sequelize.STRING(11),
-      allowNull: false,
+      allowNull: true,
     },
     state: {
       type: Sequelize.STRING(2),
@@ -27,16 +27,25 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    street: {
+    address: {
       type: Sequelize.STRING,
       allowNull: true,
     },
+    image: Sequelize.STRING,
     is_ong: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
     },
     password_hash: {
       type: Sequelize.STRING,
+      allowNull: false,
+    },
+    latitude: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+    longitude: {
+      type: Sequelize.INTEGER,
       allowNull: false,
     },
     created_at: {
