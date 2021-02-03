@@ -1,5 +1,9 @@
 module.exports = {
   root: true,
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
+  },
   extends: ['@react-native-community', 'prettier', 'prettier/react'],
   plugins: ['react', 'import', 'prettier'],
   rules: {
