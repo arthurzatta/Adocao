@@ -11,12 +11,12 @@ const Welcome = ({ navigation }) => {
       <Container >
         <Text style={styles.title}>Junte se a nós</Text>
         <Image source={require('../../assets/join_us.png')} style={styles.image} />
-        <Button onPress={() => navigation.navigate('Login')} >
+        <Button onPress={() => navigation.navigate('CreateUser')} >
           <Text style={styles.buttonText}>
             Criar conta
         </Text>
         </Button>
-        <TouchableOpacity onPress={() => navigation.navigate('CreateUser')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Text style={styles.loginText}>Já possuo conta!</Text>
         </TouchableOpacity>
       </Container>
