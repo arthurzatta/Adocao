@@ -4,13 +4,14 @@ import { Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Container } from './styles';
 import Background from '../../Components/Background';
 import Button from '../../Components/Button';
+import JoinUs from '../../assets/undraw/join_us.png';
 
 const Welcome = ({ navigation }) => {
   return (
     <Background>
       <Container >
         <Text style={styles.title}>Junte se a nós</Text>
-        <Image source={require('../../assets/join_us.png')} style={styles.image} />
+        <Image source={JoinUs} style={styles.image} />
         <Button style={styles.button} onPress={() => navigation.navigate('CreateUser')} >
           <Text style={styles.buttonText}>
             Criar conta

@@ -4,12 +4,14 @@ import { Image, Text, StyleSheet } from 'react-native';
 import { Container, Form, FormInput, SubmitButton, SignLink, SignLinkText, TLabel } from './styles';
 import Background from '../../Components/Background';
 
+import Logo from '../../assets/logotipo.png'
+
 
 const Login = ({ navigation }) => {
   return (
     <Background>
       <Container>
-        <Image source={require('../../assets/logotipo1x.png')} />
+        <Image source={Logo} />
       </Container>
       <Form style={styles.form}>
         <TLabel>Email: </TLabel>
