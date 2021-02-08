@@ -11,11 +11,11 @@ const Welcome = ({ navigation }) => {
       <Container >
         <Text style={styles.title}>Junte se a nós</Text>
         <Image source={require('../../assets/join_us.png')} style={styles.image} />
-        <Button onPress={() => navigation.navigate('CreateUser')} >
+        <Button style={styles.button} onPress={() => navigation.navigate('CreateUser')} >
           <Text style={styles.buttonText}>
             Criar conta
         </Text>
-        </Button>
+        </Button >
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Text style={styles.loginText}>Já possuo conta!</Text>
         </TouchableOpacity>
@@ -44,6 +44,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 40,
   },
+  button: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.16,
+    elevation: 3,
+  }
 });
 
 export default Welcome;

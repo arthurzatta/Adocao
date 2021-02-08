@@ -6,7 +6,7 @@ import Input from '../../Components/Input';
 export const Container = styled.View`
   padding: 0 30px;
   align-items: center;
-  margin-top: 100px;
+  margin-top: 40px;
   flex: 1;
 `;
 
@@ -27,23 +27,10 @@ export const SubmitButton = styled(Button)`
   align-self: center;
 `;
 
-export const SignLink = styled.TouchableOpacity`
-`;
-
-export const SignLinkText = styled.Text`
-  color: #a4a4a4;
-  padding-right: 20px;
-  font-weight: bold;
-  align-self: flex-end;
-  font-size: 14px;
-  margin-bottom: 30px;
-  margin-top: 10px;
-`;
-
 export const TLabel = styled.Text`
   color: #4B4B4B;
   font-family: 'Roboto-Medium';
   align-self: flex-start;
-  margin-top: 40px;
+  margin-top: 30px;
   margin-left: 10px;
 `;
