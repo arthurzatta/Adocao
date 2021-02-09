@@ -10,10 +10,12 @@ class User extends Model {
         phone: Sequelize.STRING(11),
         state: Sequelize.STRING(2),
         city: Sequelize.STRING,
-        street: Sequelize.STRING,
+        address: Sequelize.STRING,
         password: Sequelize.VIRTUAL,
         password_hash: Sequelize.STRING,
         is_ong: Sequelize.BOOLEAN,
+        latitude: Sequelize.DECIMAL,
+        longitude: Sequelize.DECIMAL,
       },
       {
         sequelize,

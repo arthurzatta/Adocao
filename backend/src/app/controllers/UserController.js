@@ -9,17 +9,9 @@ class UserController {
       return response.status(400).json({ error: 'User already exists.' });
     }
 
-    const {
-      id, name, phone, email, password,
-    } = await User.create(request.body);
+    const user = await User.create(request.body);
 
-    return response.json({
-      id,
-      name,
-      email,
-      phone,
-      password,
-    });
+    return response.json({ user });
   }
 
   async list(request, response) {
@@ -34,8 +26,6 @@ class UserController {
     if (!userData) {
       return response.status(400).json({ error: 'User not find' });
     }
-
-    console.log(userData);
 
     const {
       name, email, phone, state, city,
