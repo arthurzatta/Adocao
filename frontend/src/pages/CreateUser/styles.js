@@ -3,27 +3,28 @@ import styled from 'styled-components/native';
 import Button from '../../Components/Button';
 import Input from '../../Components/Input';
 
-export const Container = styled.View`
+export const Header = styled.View`
   padding: 0 30px;
   align-items: center;
-  margin-top: 40px;
+  margin-top: 50px;
   flex: 1;
 `;
 
-export const Form = styled.View`
-  padding: 0 10px;
+export const Form = styled.ScrollView.attrs({
+  showsVerticalScrollIndicator: false,
+})`
+  margin-top: 100px;
+  padding: 0 16px;
   background-color: rgba(246, 246, 246, 1);
   border-top-right-radius: 16px;
   border-top-left-radius: 16px;
-  justify-content: space-around;
 `;
 
 export const FormInput = styled(Input)`
-  margin-top: 10px;
 `;
 
 export const SubmitButton = styled(Button)`
-  margin-top: 40px;
+  margin-top: 30px;
   align-self: center;
 `;
 

@@ -6,9 +6,10 @@ export const Container = styled.View`
 `;
 
 export const TInput = styled.TextInput.attrs({
-  placeholderTextColor: 'rgba(164, 164, 164, 1)',
+  placeholderTextColor: '#a4a4a4',
 })`
   flex: 1;
   font-size: 18px;
   font-family: 'Roboto-Regular';
+  color: #a4a4a4;
 `;

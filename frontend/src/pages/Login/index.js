@@ -1,35 +1,54 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Image, Text, StyleSheet } from 'react-native';
+import { useDispatch } from 'react-redux';
+
+import { signInRequest } from '../../store/modules/auth/actions';
 
 import { Container, Form, FormInput, SubmitButton, SignLink, SignLinkText, TLabel } from './styles';
 import Background from '../../Components/Background';
-
 import Logo from '../../assets/logotipo.png'
 
-
 const Login = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const passwordRef = useRef();
+  const dispatch = useDispatch();
+
+  function handleSubmit() {
+    dispatch(signInRequest(email, password));
+  }
+
   return (
     <Background>
       <Container>
         <Image source={Logo} />
       </Container>
-      <Form style={styles.form}>
+      <Form style={styles.form} >
         <TLabel>Email: </TLabel>
         <FormInput
-          autoCapitalize="none"
-          autoCorrect={false}
           keyboardType="email-address"
+          autoCorrect={false}
+          autoCapitalize="none"
           placeholder=""
+          onSubmitEditing={() => passwordRef.current.focus()}
+          value={email}
+          onChangeText={setEmail}
+          returnKeyTape="next"
+
         />
 
         <TLabel>Senha: </TLabel>
         <FormInput
-          autoCapitalize="none"
           secureTextEntry
           placeholder=""
+          ref={passwordRef}
+          returnKeyTape="send"
+          value={password}
+          onChangeText={setPassword}
         />
 
-        <SubmitButton style={styles.button} onPress={() => { }}>
+        <SubmitButton style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Entrar</Text>
         </SubmitButton>
 
