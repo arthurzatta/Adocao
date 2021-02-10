@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { Header, Form, FormInput, SubmitButton, TLabel } from './styles';
 import Background from '../../Components/Background';
 
-import {createUserRequest} from '../../store/modules/user/actions'
+import {signUpRequest} from '../../store/modules/auth/actions'
 
 const Login = ({ navigation }) => {
   const ufPlaceholder = {
@@ -78,7 +78,7 @@ const Login = ({ navigation }) => {
       is_ong,
     }
 
-    dispatch(createUserRequest(data));
+    dispatch(signUpRequest(data));
   }
 
   return (

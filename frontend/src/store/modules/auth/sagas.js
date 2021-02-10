@@ -26,6 +26,26 @@ export function* signIn({ payload }) {
   }
 }
 
+export function* signUp({ payload }) {
+  try {
+    const response = yield call(api.post, '/register', {
+      ...payload.user,
+      latitude: 1234,
+      longitude: 4123
+    });
+
+    const { user } = response.data;
+
+    if (!user) {
+      Alert.alert('Verifique os dados', 'Erro ao criar sua conta');
+    }
+
+  } catch (err) {
+    Alert.alert('Falha ao criar conta', 'Houve um erro ao criar usuário')
+    yield put(signFailure());
+  }
+}
+
 export function setToken({ payload }) {
   if (!payload) return;
 
@@ -42,5 +62,6 @@ export function signOut() {
 export default all([
   takeLatest('@persist/REHYDRATE', setToken),
   takeLatest('@auth/SIGN_IN_REQUEST', signIn),
+  takeLatest('@auth/SIGN_UP_REQUEST', signUp),
   takeLatest('@auth/SIGN_OUT', signOut),
 ]);

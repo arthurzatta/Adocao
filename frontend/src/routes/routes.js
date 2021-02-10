@@ -9,7 +9,7 @@ import Tabs from './tabs.routes';
 
 const AppStack = createStackNavigator();
 
-export default function createRootRouter (signedIn = false) {
+export default function createRouter (signedIn = false) {
   return (
     <AppStack.Navigator headerMode="none" initialRouteName={signedIn ? 'Tabs' : 'Welcome'}>
       <AppStack.Screen name="Welcome" component={Welcome} />

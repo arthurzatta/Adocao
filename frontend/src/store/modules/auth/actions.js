@@ -18,6 +18,13 @@ export function signFailure() {
   };
 }
 
+export function signUpRequest(user) {
+  return {
+    type: '@auth/SIGN_UP_REQUEST',
+    payload: { user }
+  };
+}
+
 export function signOut() {
   return {
     type: '@auth/SIGN_OUT',
