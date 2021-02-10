@@ -54,7 +54,7 @@ class UserController {
     });
 
     return response.status(200).json({ success: 'Instance removed' });
-  }
+  } 
 }
 
 export default new UserController();
