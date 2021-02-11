@@ -3,8 +3,6 @@ import { Text, StyleSheet, FlatList, View } from 'react-native';
 
 import Header from '../../Components/Header';
 
-// import Icon from 'react-native-vector-icons/MaterialIcons';
-// import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { Container, BoxNotification, TitleNotification, Description } from './styles';
@@ -32,7 +30,7 @@ const Notifications = () => {
           </View>
         </BoxNotification>
         <BoxNotification style={styles.box}>
-          <Icon name='dog' size={40} color={'#FF93B5'} />
+          <Icon name='dog' size={40} color={'#4B4B4B'} />
           <View>
             <TitleNotification>Atenção!!</TitleNotification>
             <Description>Pet perdido perto de você.</Description>

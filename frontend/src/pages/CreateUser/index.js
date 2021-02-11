@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { Header, Form, FormInput, SubmitButton, TLabel } from './styles';
 import Background from '../../Components/Background';
 
-import {signUpRequest} from '../../store/modules/auth/actions'
+import { signUpRequest } from '../../store/modules/auth/actions'
 
 const Login = ({ navigation }) => {
   const ufPlaceholder = {
@@ -67,7 +67,7 @@ const Login = ({ navigation }) => {
   }, [selectedUf]);
 
   function handleSubmit() {
-    const data  = {
+    const data = {
       name,
       email,
       password,

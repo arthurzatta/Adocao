@@ -16,6 +16,7 @@ class User extends Model {
         is_ong: Sequelize.BOOLEAN,
         latitude: Sequelize.DECIMAL,
         longitude: Sequelize.DECIMAL,
+        image: Sequelize.STRING,
       },
       {
         sequelize,

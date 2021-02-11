@@ -49,7 +49,6 @@ class UserController {
         id: request.userId,
       },
       // Opçoes setadas para deletar instancias de outras tabelas que possuem o idUser
-      truncate: true,
       cascade: true,
     });
 
