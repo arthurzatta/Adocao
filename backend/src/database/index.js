@@ -1,4 +1,6 @@
 import Sequelize from 'sequelize';
+import mongoose from 'mongoose';
+
 import databaseConfig from '../config/database';
 
 import User from '../app/models/User';
@@ -14,6 +16,13 @@ class Database {
     this.connection = new Sequelize(databaseConfig);
 
     models.map((model) => model.init(this.connection));
+  }
+
+  mongo() {
+    this.mongoConnection = mongoose.connect(
+      'mongodb://localhost:27017/adocao',
+      { useNewUrlParser: true, useFindAndModify: true },
+    );
   }
 }
 
