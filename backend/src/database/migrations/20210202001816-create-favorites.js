@@ -4,6 +4,7 @@ module.exports = {
       type: Sequelize.INTEGER,
       allowNull: false,
       primaryKey: true,
+      autoIncrement: true,
     },
     id_user: {
       type: Sequelize.INTEGER,
@@ -20,6 +21,16 @@ module.exports = {
         model: 'pets',
         key: 'id',
       },
+    },
+    created_at: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW,
+    },
+    updated_at: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW,
     },
   }),
 

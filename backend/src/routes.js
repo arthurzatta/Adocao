@@ -14,17 +14,17 @@ routes.get('/', UserController.list);
 routes.post('/register', UserController.create);
 routes.post('/sessions', SessionController.store);
 
-routes.get('/pets', PetsController.list);
 routes.use(authMiddleware);
 
 routes.delete('/remove', UserController.remove);
 routes.put('/update', UserController.update);
 
+routes.get('/pets', PetsController.list);
 routes.post('/pets/create', PetsController.create);
-routes.delete('/pets/remove', PetsController.remove);
+routes.delete('/pets/remove/:id', PetsController.remove);
 
 routes.get('/favorites', FavoritesController.list);
-routes.post('/favorites/create', FavoritesController.create);
-routes.delete('/favorites/remove', FavoritesController.remove);
+routes.post('/favorites/create/:id', FavoritesController.create);
+routes.delete('/favorites/remove/:id', FavoritesController.remove);
 
 export default routes;

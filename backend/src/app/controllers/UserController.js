@@ -48,13 +48,11 @@ class UserController {
       where: {
         id: request.userId,
       },
-      // Opçoes setadas para deletar instancias de outras tabelas que possuem o idUser
-      truncate: true,
       cascade: true,
     });
 
     return response.status(200).json({ success: 'Instance removed' });
-  } 
+  }
 }
 
 export default new UserController();
