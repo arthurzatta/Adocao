@@ -48,7 +48,6 @@ class UserController {
       where: {
         id: request.userId,
       },
-      // Opçoes setadas para deletar instancias de outras tabelas que possuem o idUser
       cascade: true,
     });
 

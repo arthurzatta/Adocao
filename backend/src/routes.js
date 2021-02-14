@@ -5,6 +5,8 @@ import authMiddleware from './app/middlewares/auth';
 
 import SessionController from './app/controllers/SessionController';
 import UserController from './app/controllers/UserController';
+import PetsController from './app/controllers/PetsController';
+import FavoritesController from './app/controllers/FavoritesController';
 
 const routes = new Router();
 
@@ -16,5 +18,13 @@ routes.use(authMiddleware);
 
 routes.delete('/remove', UserController.remove);
 routes.put('/update', UserController.update);
+
+routes.get('/pets', PetsController.list);
+routes.post('/pets/create', PetsController.create);
+routes.delete('/pets/remove/:id', PetsController.remove);
+
+routes.get('/favorites', FavoritesController.list);
+routes.post('/favorites/create/:id', FavoritesController.create);
+routes.delete('/favorites/remove/:id', FavoritesController.remove);
 
 export default routes;
