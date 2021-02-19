@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-import { RadioButton } from 'react-native-paper';
 import axios from "axios";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { Header, Form, FormInput, SubmitButton, TLabel } from './styles';
+import { Header, Form, FormInput, SubmitButton, TLabel, Title } from './styles';
 import Background from '../../Components/Background';
 
-import { signUpRequest } from '../../store/modules/auth/actions'
+import { updateProfileRequest } from '../../store/modules/user/actions';
 
-const Login = ({ navigation }) => {
+const MyAccount = ({ navigation }) => {
   const ufPlaceholder = {
     label: "UF",
     value: null,
@@ -22,18 +22,18 @@ const Login = ({ navigation }) => {
   }
 
   const dispatch = useDispatch();
+  const user  = useSelector(state => state.user.user);
+
 
   const [ufs, setUfs] = useState([]);
   const [cities, setCities] = useState([]);
-  const [selectedUf, setSelectedUf] = useState("0");
-  const [selectedCity, setSelectedCity] = useState("0");
+  const [selectedUf, setSelectedUf] = useState(user.state);
+  const [selectedCity, setSelectedCity] = useState(user.city);
 
-  const [name, setName] = useState('');
-  const [is_ong, setIs_Ong] = useState('false');
-  const [email, setEmail] = useState('');
-  const [image, setImage] = useState('');
-  const [phone, setPhone] = useState('');
-  const [address, setAdress] = useState('');
+  const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
+  const [phone, setPhone] = useState(user.phone);
+  const [address, setAdress] = useState(user.address);
   const [password, setPassword] = useState('');
 
   useEffect(() => {
@@ -67,30 +67,25 @@ const Login = ({ navigation }) => {
     });
   }, [selectedUf]);
 
+
   function handleSubmit() {
-    if(image === '') {
-      setImage('https://techcommunity.microsoft.com/t5/image/serverpage/image-id/217078i525F6A9EF292601F/image-size/large?v=1.0&px=999')
-    }
     const data = {
       name,
       email,
       password,
       phone,
-      image,
       address,
       state: selectedUf,
       city: selectedCity,
-      is_ong,
     }
-
-    dispatch(signUpRequest(data));
+    dispatch(updateProfileRequest(data))
   }
 
   return (
-    <Background>
+    <Background >
       <Header>
-        <Text style={styles.title}>Registrar</Text>
-        <Text style={styles.subtitle}>Registre-se para continuar</Text>
+        <Icon name="arrow-left-thick" size={22} color={'#fff'} onPress={() => navigation.navigate('Tabs')} />
+        <Title>Meus dados</Title>
       </Header>
 
       <Form style={styles.form}>
@@ -144,7 +139,7 @@ const Login = ({ navigation }) => {
           </View>
         </View>
 
-        <TLabel>Endereço: <Text style={{ fontFamily: 'Roboto-Regular', color: '#a4a4a4' }}>(opcional)</Text></TLabel>
+        <TLabel>Endereço: </TLabel>
         <FormInput
           placeholder=""
           value={address}
@@ -159,36 +154,13 @@ const Login = ({ navigation }) => {
           value={password}
           onChangeText={setPassword}
         />
-        <View style={styles.radioContainer}>
-          <TLabel>Você é uma ONG?: </TLabel>
-          <TLabel>Sim </TLabel>
-          <RadioButton.Item
-            label="Sim"
-            color={'#FF93B5'}
-            value={'true'}
-            status={is_ong === 'true' ? 'checked' : 'unchecked'}
-            onPress={() => setIs_Ong('true')}
-          />
-          <TLabel>Não </TLabel>
-          <RadioButton.Item
-            label="Não"
-            color={'#FF93B5'}
-            value={'false'}
-            status={is_ong === 'false' ? 'checked' : 'unchecked'}
-            onPress={() => setIs_Ong('false')}
-          />
-        </View>
 
         <SubmitButton style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Criar conta</Text>
+          <Text style={styles.buttonText}>Salvar alteração</Text>
         </SubmitButton>
-
-        <Text style={styles.baseTerm}>
-          Ao criar conta você concorda com nossos <Text style={styles.innerTerm}>Termos e Condições</Text>
-        </Text>
       </Form>
     </Background >
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -259,4 +231,4 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default MyAccount;

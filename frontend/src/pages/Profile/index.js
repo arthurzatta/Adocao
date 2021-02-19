@@ -9,8 +9,8 @@ import Header from '../../Components/Header';
 
 import { signOut } from '../../store/modules/auth/actions';
 
-const Profile = () => {
-  const profile = useSelector(state => state.user.user);
+const Profile = ({ navigation }) => {
+  const user  = useSelector(state => state.user.user);
   const dispatch = useDispatch();
 
   function handleLogout() {
@@ -21,15 +21,15 @@ const Profile = () => {
     <>
       <Header>
         <View style={{ flexDirection: 'row' }}>
-          <Img style={styles.profileImage} source={{ uri: profile.image }} />
+          <Img style={styles.userImage} source={{ uri: user.image }} />
           <View>
-            <Text style={styles.yourText}>{profile.name}</Text>
-            <Text style={styles.notificationsText}>{profile.email}</Text>
+            <Text style={styles.yourText}>{user.name}</Text>
+            <Text style={styles.notificationsText}>{user.email}</Text>
           </View>
         </View>
       </Header>
       <Container>
-        <Box style={styles.box}>
+        <Box style={styles.box} onPress={() => navigation.navigate('MyAccount')}>
           <Icon name='card-account-details' size={40} color={'#4B4B4B'} />
           <View>
             <Text style={styles.textBox}>Meus dados</Text>
