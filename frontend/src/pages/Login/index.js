@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Image, Text, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
 
@@ -35,7 +35,6 @@ const Login = ({ navigation }) => {
           value={email}
           onChangeText={setEmail}
           returnKeyTape="next"
-
         />
 
         <TLabel>Senha: </TLabel>
