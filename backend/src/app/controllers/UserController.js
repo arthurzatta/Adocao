@@ -11,7 +11,7 @@ class UserController {
 
     const user = await User.create(request.body);
 
-    return response.json( user );
+    return response.json(user);
   }
 
   async list(request, response) {
@@ -29,7 +29,7 @@ class UserController {
 
     const user = await userData.update(request.body);
 
-    return response.json( user );
+    return response.json(user);
   }
 
   async remove(request, response) {

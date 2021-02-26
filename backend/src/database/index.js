@@ -1,5 +1,5 @@
 import Sequelize from 'sequelize';
-import mongoose from 'mongoose';
+// import mongoose from 'mongoose';
 
 import databaseConfig from '../config/database';
 
@@ -20,12 +20,12 @@ class Database {
     models.map((model) => model.init(this.connection));
   }
 
-  mongo() {
-    this.mongoConnection = mongoose.connect(
-      'mongodb://localhost:27017/adocao',
-      { useNewUrlParser: true, useFindAndModify: true },
-    );
-  }
+  // mongo() {
+  //   this.mongoConnection = mongoose.connect(
+  //     'mongodb://localhost:27017/adocao',
+  //     { useNewUrlParser: true, useFindAndModify: true },
+  //   );
+  // }
 }
 
 export default new Database();

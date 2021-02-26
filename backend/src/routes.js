@@ -21,6 +21,7 @@ routes.put('/update', UserController.update);
 
 routes.get('/pets', PetsController.list);
 routes.post('/pets/create', PetsController.create);
+routes.post('/pets/filter', PetsController.filter);
 routes.delete('/pets/remove/:id', PetsController.remove);
 
 routes.get('/favorites', FavoritesController.list);
