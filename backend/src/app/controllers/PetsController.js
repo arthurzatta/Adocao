@@ -7,6 +7,8 @@ class PetsController {
   async create(request, response) {
     const petObj = request.body;
 
+    console.log(petObj);
+
     petObj.id_user = request.userId;
 
     const pets = await Pets.create(petObj);
@@ -34,27 +36,19 @@ class PetsController {
   }
 
   async filter(request, response) {
-    const user = await User.findByPk(request.userId);
-
-    if (!user) {
-      return response.status(400).json({ error: 'User not find' });
-    }
-
     const db = new Sequelize(dbConfig);
     const {
-      name, state = user.state, city = user.city, type, sex,
+      name, state, city, type, sex,
     } = request.body;
 
-    const results = await db.query('SELECT P.id, P.name, P.type, P.sex, U.name as user_name FROM pets P INNER JOIN users U on P.id_user = U.id WHERE U.state = :state and U.city = :city', {
+    const results = await db.query('select P.name, P.image, P.sex, P.id from pets P inner join users U on P.id_user = U.id where U.name = :name or (sex = :sex and type = :type) and (U.state = :state and U.city = :city)', {
       replacements: {
-        state, city,
+        name, type, sex, state, city,
       },
       type: QueryTypes.SELECT,
     });
 
-    const newResults = results.filter((item) => item.sex === sex);
-
-    return response.json(newResults);
+    return response.json(results);
   }
 
   async remove(request, response) {
