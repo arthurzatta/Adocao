@@ -43,10 +43,10 @@ class PetsController {
 
     const db = new Sequelize(dbConfig);
     const {
-      name, state = user.state, city = user.city, type, sex,
+      name, state = user.state, city = user.city, type, sex, items,
     } = request.body;
 
-    let results = await db.query('SELECT P.id, P.name, P.image, P.sex, P.type, U.name as user_name FROM pets P INNER JOIN users U ON P.id_user = U.id WHERE U.state = :state AND U.city = :city', {
+    let results = await db.query('SELECT P.id, P.name, P.image, P.sex, P.type, P.items, U.name as user_name FROM pets P INNER JOIN users U ON P.id_user = U.id WHERE U.state = :state AND U.city = :city', {
       replacements: {
         state, city,
       },
@@ -63,6 +63,12 @@ class PetsController {
 
     if (type != null) {
       results = results.filter((item) => item.type === type);
+    }
+
+    if (items != null) {
+      for (let i = 0; i < items.length; i++) {
+        results = results.filter((item) => item.items.includes(items[i]));
+      }
     }
 
     return response.json(results);
