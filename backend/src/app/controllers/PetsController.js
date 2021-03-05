@@ -7,8 +7,6 @@ class PetsController {
   async create(request, response) {
     const petObj = request.body;
 
-    console.log(petObj);
-
     petObj.id_user = request.userId;
 
     const pets = await Pets.create(petObj);
