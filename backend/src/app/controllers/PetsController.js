@@ -17,8 +17,12 @@ class PetsController {
       return response.status(400).json({ error: 'User not find' });
     }
 
-    petObj.id_user = request.userId;
-    const pet = await Pets.create(petObj);
+    const pet = await Pets.create({
+      latitude: user.latitude,
+      longitude: user.longitude,
+      id_user: user.id,
+      ...petObj,
+    });
 
     // Notificação + Calculo de distância
     // Pega as coordenadas do dono do pet
@@ -63,8 +67,10 @@ class PetsController {
       }
     });
 
-    notifications.pop();
-    await Notification.insertMany(notifications);
+    if (!notifications) {
+      notifications.pop();
+      await Notification.insertMany(notifications);
+    }
 
     return response.json(pet);
   }
@@ -96,29 +102,48 @@ class PetsController {
 
     const db = new Sequelize(dbConfig);
     const {
-      name, state = user.state, city = user.city, type, sex, items,
+      name, state = user.state, city = user.city, type, sex, items, radius,
     } = request.body;
 
-    let results = await db.query('SELECT P.id, P.name, P.image, P.sex, P.type, P.items, U.name as user_name FROM pets P INNER JOIN users U ON P.id_user = U.id WHERE U.state = :state AND U.city = :city', {
+    let results = await db.query('SELECT P.id, P.name, P.image, P.sex, P.type, P.latitude, P.longitude, P.items, U.name as user_name FROM pets P INNER JOIN users U ON P.id_user = U.id WHERE U.state = :state AND U.city = :city', {
       replacements: {
         state, city,
       },
       type: QueryTypes.SELECT,
     });
 
-    if (name != null) {
+    if (name) {
       results = results.filter((item) => item.user_name === name);
     }
 
-    if (sex != null) {
-      results = results.filter((item) => item.sex === sex);
-    }
-
-    if (type != null) {
+    if (type) {
       results = results.filter((item) => item.type === type);
     }
 
-    if (items != null) {
+    if (sex) {
+      results = results.filter((item) => item.sex === sex);
+    }
+
+    if (radius) {
+      let { latitude: lat1, longitude: long1 } = user;
+      lat1 = Number(lat1);
+      long1 = Number(long1);
+      const centerCoordinates = { lat1, long1 };
+
+      results = results.filter((item) => {
+        let { latitude: lat2, longitude: long2 } = item;
+        lat2 = Number(lat2);
+        long2 = Number(long2);
+        const pointCoordinates = { lat2, long2 };
+
+        const distance = calculateDistance(centerCoordinates, pointCoordinates);
+        if (distance <= radius) {
+          return item;
+        }
+      });
+    }
+
+    if (items) {
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < items.length; i++) {
         results = results.filter((item) => item.items.includes(items[i]));
