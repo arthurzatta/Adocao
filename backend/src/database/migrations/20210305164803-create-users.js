@@ -41,12 +41,12 @@ module.exports = {
       allowNull: false,
     },
     latitude: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
+      type: Sequelize.STRING,
+      allowNull: true,
     },
     longitude: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
+      type: Sequelize.STRING,
+      allowNull: true,
     },
     created_at: {
       type: Sequelize.DATE,

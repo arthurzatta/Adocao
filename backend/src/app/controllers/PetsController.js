@@ -1,17 +1,72 @@
 import { Sequelize, QueryTypes } from 'sequelize';
+
 import Pets from '../models/Pets';
 import User from '../models/User';
+import calculateDistance from '../../utils/calculateDistance';
+import Notification from '../schemas/Notification';
+
 import dbConfig from '../../config/database';
 
 class PetsController {
   async create(request, response) {
     const petObj = request.body;
 
+    const user = await User.findByPk(request.userId);
+
+    if (!user) {
+      return response.status(400).json({ error: 'User not find' });
+    }
+
     petObj.id_user = request.userId;
+    const pet = await Pets.create(petObj);
 
-    const pets = await Pets.create(petObj);
+    // Notificação + Calculo de distância
+    // Pega as coordenadas do dono do pet
+    let { latitude: lat1, longitude: long1 } = user;
+    lat1 = Number(lat1);
+    long1 = Number(long1);
+    const centerCoordinates = { lat1, long1 };
 
-    return response.json(pets);
+    // Percorre um array de usuarios (exceto o dono) e calcula a distância de cada um com o dono
+    const { ne } = Sequelize.Op;
+    const listUsers = await User.findAll({
+      where: {
+        id: {
+          [ne]: request.userId,
+        },
+      },
+    });
+
+    const notifications = listUsers.map((item) => {
+      let { latitude: lat2, longitude: long2 } = item;
+      lat2 = Number(lat2);
+      long2 = Number(long2);
+      const pointCoordinates = { lat2, long2 };
+
+      let distance = calculateDistance(centerCoordinates, pointCoordinates);
+      if (distance < 4) {
+        if (distance < 1) {
+          distance = `${(distance * 1000).toPrecision(3)} m de distância`;
+        } else {
+          distance = `${(distance).toPrecision(3)} Km de distância`;
+        }
+
+        // cria objeto de notificação
+        const notification = {
+          title: 'Adoção por perto!',
+          subtitle: `Pet para adoção à ${distance}`,
+          user_id: item.id,
+          pet_id: pet.id,
+        };
+
+        return notification;
+      }
+    });
+
+    notifications.pop();
+    await Notification.insertMany(notifications);
+
+    return response.json(pet);
   }
 
   async list(request, response) {
@@ -64,6 +119,7 @@ class PetsController {
     }
 
     if (items != null) {
+      // eslint-disable-next-line no-plusplus
       for (let i = 0; i < items.length; i++) {
         results = results.filter((item) => item.items.includes(items[i]));
       }

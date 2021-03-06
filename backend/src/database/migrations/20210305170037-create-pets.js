@@ -14,11 +14,11 @@ module.exports = {
     image: Sequelize.STRING,
     sex: Sequelize.CHAR(1),
     latitude: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING,
       allowNull: true,
     },
     longitude: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING,
       allowNull: true,
     },
     is_lost: {
