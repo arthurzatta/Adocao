@@ -16,62 +16,65 @@ class PetsController {
     if (!user) {
       return response.status(400).json({ error: 'User not find' });
     }
+    let pet = [];
 
-    const pet = await Pets.create({
-      latitude: user.latitude,
-      longitude: user.longitude,
-      id_user: user.id,
-      ...petObj,
-    });
+    if (!petObj.is_lost) {
+      pet = await Pets.create({
+        latitude: user.latitude,
+        longitude: user.longitude,
+        id_user: user.id,
+        ...petObj,
+      });
 
-    // Notificação + Calculo de distância
-    // Pega as coordenadas do dono do pet
-    let { latitude: lat1, longitude: long1 } = user;
-    lat1 = Number(lat1);
-    long1 = Number(long1);
-    const centerCoordinates = { lat1, long1 };
+      // Pega as coordenadas do dono do pet
+      let { latitude: lat1, longitude: long1 } = user;
+      lat1 = Number(lat1);
+      long1 = Number(long1);
+      const centerCoordinates = { lat1, long1 };
 
-    // Percorre um array de usuarios (exceto o dono) e calcula a distância de cada um com o dono
-    const { ne } = Sequelize.Op;
-    const listUsers = await User.findAll({
-      where: {
-        id: {
-          [ne]: request.userId,
+      // Percorre um array de usuarios (exceto o dono) e calcula a distância de cada um com o dono
+      const { ne } = Sequelize.Op;
+      const listUsers = await User.findAll({
+        where: {
+          id: {
+            [ne]: request.userId,
+          },
         },
-      },
-    });
+      });
 
-    const notifications = listUsers.map((item) => {
-      let { latitude: lat2, longitude: long2 } = item;
-      lat2 = Number(lat2);
-      long2 = Number(long2);
-      const pointCoordinates = { lat2, long2 };
+      // Um array de notificações é criado
+      // A notificação é criada para o usuário que está em um raio de 2km
+      const notifications = await listUsers.map((item) => {
+        let { latitude: lat2, longitude: long2 } = item;
+        lat2 = Number(lat2);
+        long2 = Number(long2);
+        const pointCoordinates = { lat2, long2 };
 
-      let distance = calculateDistance(centerCoordinates, pointCoordinates);
-      if (distance < 4) {
-        if (distance < 1) {
-          distance = `${(distance * 1000).toPrecision(3)} m de distância`;
-        } else {
-          distance = `${(distance).toPrecision(3)} Km de distância`;
+        let distance = calculateDistance(centerCoordinates, pointCoordinates);
+        if (distance < 2) {
+          if (distance < 1) {
+            distance = `${(distance * 1000).toPrecision(3)} m de distância`;
+          } else {
+            distance = `${(distance).toPrecision(3)} Km de distância`;
+          }
+
+          const notification = {
+            title: 'Adoção por perto!',
+            subtitle: `Pet para adoção à ${distance}`,
+            user_id: item.id,
+            pet_id: pet.id,
+          };
+
+          return notification;
         }
+      });
 
-        // cria objeto de notificação
-        const notification = {
-          title: 'Adoção por perto!',
-          subtitle: `Pet para adoção à ${distance}`,
-          user_id: item.id,
-          pet_id: pet.id,
-        };
-
-        return notification;
+      // Cria a schema de notificações
+      if (notifications) {
+        notifications.pop();
+        await Notification.insertMany(notifications);
       }
-    });
-
-    if (!notifications) {
-      notifications.pop();
-      await Notification.insertMany(notifications);
     }
-
     return response.json(pet);
   }
 
