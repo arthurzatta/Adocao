@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 
-import { Container, Img, Box, SmallBox } from './styles';
+import { Container, Img, Box, SmallBox, Form } from './styles';
 import Header from '../../Components/Header';
 
 import { signOut } from '../../store/modules/auth/actions';
@@ -65,7 +65,6 @@ const Profile = () => {
           </SmallBox>
         </View>
       </Container>
-
     </>
   );
 }
