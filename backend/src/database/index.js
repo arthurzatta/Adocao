@@ -23,7 +23,7 @@ class Database {
 
   mongo() {
     this.mongoConnection = mongoose.connect(
-      'mongodb+srv://adocao:ekIIhWBsUNb9as29@cluster0.brtp0.mongodb.net/test',
+      'mongodb+srv://adocao:ekIIhWBsUNb9as29@cluster0.brtp0.mongodb.net/adocao?retryWrites=true&w=majority',
       { useNewUrlParser: true, useFindAndModify: true, useUnifiedTopology: true },
     );
 

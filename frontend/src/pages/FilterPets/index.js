@@ -10,7 +10,6 @@ import  IconIsto  from 'react-native-vector-icons/Fontisto';
 
 import axios from 'axios';
 import api from '../../services/api';
-import { normalize } from './normalize';
 
 const Filter = ({ navigation }) => {
   const [nameOwner, setNameOwner] = useState('');
