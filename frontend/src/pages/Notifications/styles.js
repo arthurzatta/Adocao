@@ -1,22 +1,5 @@
 import styled from 'styled-components/native';
 
-export const Container = styled.View`
-  padding: 0 30px;
-  align-items: center;
-  flex: 1;
-`;
-
-export const BoxNotification = styled.TouchableOpacity`
-  margin-top: 10px;
-  width: 364px;
-  height: 85px;
-  background: #fff;
-  border-radius: 8px;
-  flex-direction: row;
-  align-items: center;
-  padding: 0 30px;
-`;
-
 export const TitleNotification = styled.Text`
   font-family: 'Ubuntu-Medium';
   font-size: 18;

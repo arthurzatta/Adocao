@@ -44,7 +44,8 @@ class PetsController {
 
       // Um array de notificações é criado
       // A notificação é criada para o usuário que está em um raio de 2km
-      const notifications = await listUsers.map((item) => {
+      const notifications = [];
+      listUsers.map((item) => {
         let { latitude: lat2, longitude: long2 } = item;
         lat2 = Number(lat2);
         long2 = Number(long2);
@@ -61,17 +62,17 @@ class PetsController {
           const notification = {
             title: 'Adoção por perto!',
             subtitle: `Pet para adoção à ${distance}`,
+            type: 'create',
             user_id: item.id,
             pet_id: pet.id,
           };
 
-          return notification;
+          notifications.push(notification);
         }
       });
 
       // Cria a schema de notificações
       if (notifications) {
-        notifications.pop();
         await Notification.insertMany(notifications);
       }
     }
