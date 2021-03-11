@@ -1,22 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { RadioButton } from 'react-native-paper';
-import { SubmitButton, FormInput, TLabel, Header, Form, IconContainer, IconBox } from './styles';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import IconIO from 'react-native-vector-icons/Ionicons';
+import IconIsto from 'react-native-vector-icons/Fontisto';
 
-import  Icon  from 'react-native-vector-icons/MaterialIcons';
-import  IconIO  from 'react-native-vector-icons/Ionicons';
-import  IconIsto  from 'react-native-vector-icons/Fontisto';
-
-import api from '../../services/api';
+import { SubmitButton, FormInput, TLabel, Header, Form, IconBox, IconContainer } from './styles';
 
 const CreatePet = ({ navigation }) => {
-
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [photo, setPhoto] = useState('');
-  const [type, setType] = useState('');
+  const [nameOwner, setNameOwner] = useState('');
   const [sex, setSex] = useState('true');
+  const [type, setType] = useState('');
 
   //Estados dos icones
   const [vacinado, setVacinado] = useState(false);
@@ -24,41 +19,28 @@ const CreatePet = ({ navigation }) => {
   const [vermifugado, setVermifugado] = useState(false);
   const [chipado, setChipado] = useState(false);
 
-  function handleSubmit(){
-    const data = {
-      name,
-      description,
-      type,
-      sex
-    };
-    api.post('pets/create', data);
-  };
+  function submitButton(){
 
+  }
 
   return (
     <View style={styles.container}>
-      <Form>
+      <Form style={styles.form}>
         <Header>
-          <Text style={styles.title}>Cadastrar</Text>
+          <Text style={styles.title}>Criar</Text>
           <Text style={styles.clean}>Limpar</Text>
         </Header>
+
         <TLabel>Nome do pet:</TLabel>
         <FormInput
           autoCapitalize="none"
           autoCorrect={false}
           placeholder=""
-          value={name}
-          onChangeText={setName}
-        />
-        <TLabel>Descrição:</TLabel>
-        <FormInput
-          autoCapitalize="none"
-          autoCorrect={false}
-          placeholder=""
-          value={description}
-          onChangeText={setDescription}
+          value={nameOwner}
+          onChangeText={setNameOwner}
         />
 
+        {/* Tipo */}
         <View>
           <TLabel>Tipo:</TLabel>
           <RNPickerSelect
@@ -66,8 +48,8 @@ const CreatePet = ({ navigation }) => {
               label: '-',
               value: null
             }}
-            onValueChange={(value) => setType(value)}
             style={pickerSelectStyles}
+            onValueChange={(value) => setType(value)}
             items={[
               { label: 'Cachorro', value: 'cachorro' },
               { label: 'Gato', value: 'gato' },
@@ -77,88 +59,94 @@ const CreatePet = ({ navigation }) => {
           />
         </View>
 
-        <View style={styles.radioButtonContainer}>
+        {/* RadioButton */}
+        <View style={styles.radioContainer}>
           <TLabel>Sexo:</TLabel>
           <TLabel>Macho</TLabel>
           <RadioButton.Item
-            label="Macho"
             color={'#FF93B5'}
             value={'true'}
+            style={{marginTop: 15}}
             status={sex === 'true' ? 'checked' : 'unchecked'}
             onPress={() => setSex('true')}
-          />
+            />
           <TLabel>Fêmea</TLabel>
           <RadioButton.Item
-            label="Fêmea"
             color={'#FF93B5'}
+            style={{marginTop: 15}}
             value={'false'}
             status={sex === 'false' ? 'checked' : 'unchecked'}
             onPress={() => setSex('false')}
-            style={styles.radio}
           />
         </View>
+
         <IconContainer>
-        {/* Vacinado Icon */}
-        <IconBox
-          onPress={() => (!vacinado ? setVacinado(true): setVacinado(false))}
-          style={{borderColor: !vacinado ? '#A4A4A4' : '#FF93B5',}}
-        >
-          <IconIsto name='injection-syringe' style={[iconsStyle.icons, {color: !vacinado ? '#A4A4A4' :'#FF93B5'}]} />
-          <Text style={[iconsStyle.text, {color: !vacinado ? '#A4A4A4' :'#FF93B5'}]}>Vacinado</Text>
-        </IconBox>
+          {/* Vacinado Icon */}
+          <IconBox
+            onPress={() => (!vacinado ? setVacinado(true) : setVacinado(false))}
+            style={{ borderColor: !vacinado ? '#A4A4A4' : '#FF93B5', }}
+          >
+            <IconIsto name='injection-syringe' style={[iconsStyle.icons, { color: !vacinado ? '#A4A4A4' : '#FF93B5' }]} />
+            <Text style={[iconsStyle.text, { color: !vacinado ? '#A4A4A4' : '#FF93B5' }]}>Vacinado</Text>
+          </IconBox>
 
-        {/* Castrado Icon */}
-        <IconBox
-          onPress={() => (!castrado ? setCastrado(true): setCastrado(false))}
-          style={{borderColor: !castrado ? '#A4A4A4' : '#FF93B5',}}
-        >
-          <Icon name='pets' style={[iconsStyle.icons, {color: !castrado ? '#A4A4A4' :'#FF93B5'}]}/>
-          <Text style={[iconsStyle.text, {color: !castrado ? '#A4A4A4' :'#FF93B5'}]}>Castrado</Text>
-        </IconBox>
+          {/* Castrado Icon */}
+          <IconBox
+            onPress={() => (!castrado ? setCastrado(true) : setCastrado(false))}
+            style={{ borderColor: !castrado ? '#A4A4A4' : '#FF93B5', }}
+          >
+            <Icon name='pets' style={[iconsStyle.icons, { color: !castrado ? '#A4A4A4' : '#FF93B5' }]} />
+            <Text style={[iconsStyle.text, { color: !castrado ? '#A4A4A4' : '#FF93B5' }]}>Castrado</Text>
+          </IconBox>
 
-        {/* Vermifugado Icon */}
-        <IconBox
-          onPress={() => (!vermifugado ? setVermifugado(true): setVermifugado(false))}
-          style={{borderColor: !vermifugado ? '#A4A4A4' : '#FF93B5',}}
-        >
-          <IconIsto name='drug-pack' style={[iconsStyle.icons, {color: !vermifugado ? '#A4A4A4' :'#FF93B5'}]}/>
-          <Text style={[iconsStyle.text, {color: !vermifugado ? '#A4A4A4' :'#FF93B5'}]}>Vermifugado</Text>
-        </IconBox>
+          {/* Vermifugado Icon */}
+          <IconBox
+            onPress={() => (!vermifugado ? setVermifugado(true) : setVermifugado(false))}
+            style={{ borderColor: !vermifugado ? '#A4A4A4' : '#FF93B5', }}
+          >
+            <IconIsto name='drug-pack' style={[iconsStyle.icons, { color: !vermifugado ? '#A4A4A4' : '#FF93B5' }]} />
+            <Text style={[iconsStyle.text, { color: !vermifugado ? '#A4A4A4' : '#FF93B5' }]}>Vermifugado</Text>
+          </IconBox>
 
-        {/* Chipado Icon */}
-        <IconBox
-          onPress={() => (!chipado ? setChipado(true): setChipado(false))}
-          style={{borderColor: !chipado ? '#A4A4A4' : '#FF93B5',}}
-        >
-          <IconIO name='hardware-chip-outline' style={[iconsStyle.icons, {color: !chipado ? '#A4A4A4' :'#FF93B5'}]} />
-          <Text style={[iconsStyle.text, {color: !chipado ? '#A4A4A4' :'#FF93B5'}]}>Chipado</Text>
-        </IconBox>
+          {/* Chipado Icon */}
+          <IconBox
+            onPress={() => (!chipado ? setChipado(true) : setChipado(false))}
+            style={{ borderColor: !chipado ? '#A4A4A4' : '#FF93B5', }}
+          >
+            <IconIO name='hardware-chip-outline' style={[iconsStyle.icons, { color: !chipado ? '#A4A4A4' : '#FF93B5' }]} />
+            <Text style={[iconsStyle.text, { color: !chipado ? '#A4A4A4' : '#FF93B5' }]}>Chipado</Text>
+          </IconBox>
+        </IconContainer>
 
-      </IconContainer>
-
-      <SubmitButton style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Cadastrar Pet</Text>
-      </SubmitButton>
+        <SubmitButton style={styles.button} onPress={submitButton}>
+          <Text style={styles.buttonText}>Criar pet</Text>
+        </SubmitButton>
       </Form>
     </View>
-  );
-}
+  )
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 10,
+    flexDirection: 'column',
   },
   title: {
-    fontFamily: "Ubuntu-Bold",
+    fontFamily: 'Roboto-Medium',
     fontSize: 18,
     color: '#4B4B4B',
   },
   clean: {
-    fontFamily: "Ubuntu",
+    fontFamily: 'Roboto-Medium',
     fontSize: 18,
     color: '#FF93B5'
   },
-  radioButtonContainer: {
+  pickerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  radioContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -177,8 +165,20 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.16,
     elevation: 3,
-  }
+  },
 });
+
+const iconsStyle = StyleSheet.create({
+  icons: {
+    alignSelf: 'center',
+    fontSize: 31,
+  },
+  text: {
+    alignSelf: 'center',
+    fontFamily: 'Ubuntu',
+    fontSize: 12
+  }
+})
 
 const pickerSelectStyles = StyleSheet.create({
   inputAndroid: {
@@ -187,17 +187,4 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
-const iconsStyle = StyleSheet.create({
-  icons: {
-    alignSelf: 'center',
-    fontSize: 50,
-  },
-  text: {
-    alignSelf: 'center',
-    fontFamily: 'Ubuntu',
-  }
-})
 export default CreatePet;
-
-
-
