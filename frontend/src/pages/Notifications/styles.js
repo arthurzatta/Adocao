@@ -7,7 +7,7 @@ export const Container = styled.View`
 `;
 
 export const BoxNotification = styled.TouchableOpacity`
-margin-top: 10px;
+  margin-top: 10px;
   width: 364px;
   height: 85px;
   background: #fff;
@@ -31,4 +31,6 @@ export const Description = styled.Text`
   margin-left: 30px;
 `;
 
+export const Button = styled.TouchableOpacity`
 
+`;
