@@ -36,3 +36,7 @@ export const SmallBox = styled.TouchableOpacity`
   margin-left: 12px;
 `;
 
+export const Form = styled.ScrollView.attrs({
+  showsVerticalScrollIndicator: false,
+})`
+`;
