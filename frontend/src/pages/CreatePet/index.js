@@ -16,14 +16,6 @@ const CreatePet = ({ navigation }) => {
   const [description, setDescription] = useState();
 
   //Estados dos icones
-<<<<<<< HEAD
-  const [vacinado, setVacinado] = useState(false);
-  const [castrado, setCastrado] = useState(false);
-  const [vermifugado, setVermifugado] = useState(false);
-  const [chipado, setChipado] = useState(false);
-
-  function handleSubmit(){
-=======
   const [vacinado, setVacinado] = useState();
   const [castrado, setCastrado] = useState();
   const [vermifugado, setVermifugado] = useState();
@@ -37,7 +29,6 @@ const CreatePet = ({ navigation }) => {
 
     const items = [vacinado,castrado,vermifugado,chipado];
     
->>>>>>> imagePicker
     const data = {
       name,
       description,
@@ -78,7 +69,8 @@ const CreatePet = ({ navigation }) => {
           placeholder=""
           value={description}
           onChangeText={setDescription}
-        />        
+        />
+                
         {/* Tipo */}
         <View>
           <TLabel>Tipo:</TLabel>
@@ -225,9 +217,6 @@ const iconsStyle = StyleSheet.create({
     fontSize: 12
   }
 })
-<<<<<<< HEAD
-export default CreatePet;
-=======
 
 const pickerSelectStyles = StyleSheet.create({
   inputAndroid: {
@@ -237,4 +226,3 @@ const pickerSelectStyles = StyleSheet.create({
 });
 
 export default CreatePet;
->>>>>>> imagePicker

@@ -1,78 +1,77 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../Components/Header/index';
-import { View, Text, StyleSheet, Image, } from 'react-native';
-import { Container, IconButton, IconContainer, Form, TLabel, width } from './styles';
+import { View, Text, StyleSheet, ScrollView} from 'react-native';
+import { Container, IconButton, IconContainer, Form, TLabel, Img } from './styles';
 import  Icon  from 'react-native-vector-icons/MaterialIcons';  
 import  IconIO  from 'react-native-vector-icons/Ionicons';  
 import  IconIsto  from 'react-native-vector-icons/Fontisto';  
 
 const DescriptionPet = (({navigation}) => {
 
-
   return (
+    <ScrollView style={{flex:1}}>
     <Header>
-      <Icon name='arrow-back'/>
-      <Container>
-        <Image 
-          source={require('../../assets/fagner.png')} 
-          style={{width: width-40, height: 50}}
+      <Icon name='arrow-back' 
+        onPress={() => navigation.pop()}
+        style={{ fontSize: 40, color: '#FFFFFF'}}
         />
-
-        <IconContainer>
-          <IconButton icon='message' color='rgba(95,169,61,1)' />
-          <IconButton icon='heart-outline' color='rgba(215,68,62,1)'/>
-        </IconContainer>
-        
-        <Form>
-          <View>
-            <View style={styles.infos}>
-              <Text style={styles.title}>Fagner</Text>
-              <IconIO name='male-sharp' style={styles.icon}/>
-            </View>
-              <Text style={styles.subtitle}>Distancia</Text>
+    </Header>  
+    
+    <Container style={styles.box}>
+      <IconContainer>
+        <IconButton icon='message' color='rgba(95,169,61,1)' />
+        <IconButton icon='heart-outline' color='rgba(215,68,62,1)'/>
+      </IconContainer>
+      
+      <Form>
+        <View>
+          <View style={styles.infos}>
+            <Text style={styles.title}>Fagner</Text>
+            <IconIO name='male-sharp' style={styles.icon}/>
           </View>
+            <Text style={styles.subtitle}>Distancia</Text>
+        </View>
 
-          <View style={styles.descriptionContainer}>
-            <Text style={styles.description}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Text>
+        <View style={styles.descriptionContainer}>
+          <Text style={styles.description}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Text>
 
-            <View style={statusStyle.row}>
-              <View style={statusStyle.column}>
-                <View style={statusStyle.status}>
-                    <IconIsto name='injection-syringe'/>
-                    <TLabel>Vacinado:</TLabel>
-                    <Icon name='check'/>
-                </View>
-                <View style={statusStyle.status}>
-                  <Icon name='pets'/>
-                  <TLabel>Castrado:</TLabel>
-                  <Icon name='close'/>
-                </View>
-              </View>
-              <View style={statusStyle.column}>
+          <View style={statusStyle.row}>
+            <View style={statusStyle.column}>
               <View style={statusStyle.status}>
-                <IconIsto name='drug-pack'/>
-                <TLabel>Vermifugado:</TLabel>
-                <Icon name='check'/>
+                  <IconIsto name='injection-syringe'/>
+                  <TLabel>Vacinado:</TLabel>
+                  <Icon name='check'/>
               </View>
               <View style={statusStyle.status}>
-                <IconIO name='hardware-chip-outline'/>
-                <TLabel>Chipado:</TLabel>
+                <Icon name='pets'/>
+                <TLabel>Castrado:</TLabel>
                 <Icon name='close'/>
               </View>
-              </View>
+            </View>
+            <View style={statusStyle.column}>
+            <View style={statusStyle.status}>
+              <IconIsto name='drug-pack'/>
+              <TLabel>Vermifugado:</TLabel>
+              <Icon name='check'/>
+            </View>
+            <View style={statusStyle.status}>
+              <IconIO name='hardware-chip-outline'/>
+              <TLabel>Chipado:</TLabel>
+              <Icon name='close'/>
+            </View>
             </View>
           </View>
+        </View>
+        <View style={{paddingTop: 10}}>
+          <Text style={styles.nameOwner}>Nome Dono</Text>
+          <Text style={styles.infOwner}>Cidade</Text>
+          <Text style={styles.infOwner}>Telefone</Text>
+        </View>
+      </Form>
+    </Container>
 
-          <View style={{paddingTop: 10}}>
-            <Text style={styles.nameOwner}>Nome Dono</Text>
-            <Text style={styles.infOwner}>Cidade</Text>
-            <Text style={styles.infOwner}>Telefone</Text>
-          </View>
-
-        </Form>
-      </Container>
-    </Header>     
+  </ScrollView>
   )
 });
 
@@ -118,6 +117,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#4B4B4B',
     paddingTop: 10
+  },
+  box: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.30,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  icon: {
+    
   }
 });
 

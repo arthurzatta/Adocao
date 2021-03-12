@@ -4,11 +4,8 @@ import { FAB } from 'react-native-paper';
 
 export const { height,width } = Dimensions.get('window');
 
-export const Container = styled.ScrollView.attrs({
-  directionalLockEnabled: true,
-})` 
-  flex: 1;
-  border-radius: 10px;
+export const Container = styled.View` 
+  border-radius: 16px;
   background-color: rgba(246, 246, 246, 1);
   position: absolute;
   top: 90px;
@@ -47,5 +44,9 @@ export const TLabel = styled.Text`
   align-self: flex-start;
   padding-left: 10px;
   padding-right: 5px;
-  
 `;
+
+export const Img = styled.Image`
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+`

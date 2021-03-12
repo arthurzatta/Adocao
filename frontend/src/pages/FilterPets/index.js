@@ -265,17 +265,9 @@ const styles = StyleSheet.create({
       width: 0,
       height: 8,
     },
-<<<<<<< HEAD
-    text: {
-      alignSelf: 'center',
-      fontFamily: 'Ubuntu',
-    }
-  });
-=======
     shadowOpacity: 0.16,
     elevation: 3,
   },
->>>>>>> imagePicker
 
 });
 
