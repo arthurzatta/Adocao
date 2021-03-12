@@ -8,7 +8,8 @@ import Notification from '../pages/Notifications';
 import Profile from '../pages/Profile';
 import Schedule from '../pages/Schedule';
 import CreatePet from '../pages/CreatePet';
-import Filter from '../pages/FilterPets'
+import Filter from '../pages/FilterPets';
+import DescriptionPet from '../pages/DescriptionPet';
 
 const Tab = createBottomTabNavigator();
 
@@ -38,7 +39,7 @@ export default function TabsRoutes() {
       }}
     >
       <Tab.Screen name="Home" component={CreatePet} />
-      <Tab.Screen name="Schedule" component={Filter} />
+      <Tab.Screen name="Schedule" component={DescriptionPet} />
       <Tab.Screen name="Notification" component={Notification} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>

@@ -10,7 +10,6 @@ import  IconIsto  from 'react-native-vector-icons/Fontisto';
 
 import axios from 'axios';
 import api from '../../services/api';
-import { normalize } from './normalize';
 
 const Filter = ({ navigation }) => {
   const [nameOwner, setNameOwner] = useState('');
@@ -22,6 +21,7 @@ const Filter = ({ navigation }) => {
   const [cities, setCities] = useState([]);
   const [selectedUf, setSelectedUf] = useState("0");
   const [selectedCity, setSelectedCity] = useState("0");
+
   //Estados dos icones
   const [vacinado, setVacinado] = useState(false);
   const [castrado, setCastrado] = useState(false);
@@ -261,7 +261,7 @@ const Filter = ({ navigation }) => {
       alignSelf: 'center',
       fontFamily: 'Ubuntu',
     }
-  })
+  });
 
   const radioButtonStyles = StyleSheet.create({
     radioContainer: {

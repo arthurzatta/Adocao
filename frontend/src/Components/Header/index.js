@@ -12,6 +12,6 @@ export default styled(LinearGradient).attrs({
   flex: 1;
   padding:  0 30px;
   max-height: 180px;
-  border-bottom-right-radius: 120px;
+  border-bottom-right-radius: 126px;
   justify-content: center;
 `;

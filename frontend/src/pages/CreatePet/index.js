@@ -23,7 +23,7 @@ const CreatePet = ({ navigation }) => {
   const [castrado, setCastrado] = useState(false);
   const [vermifugado, setVermifugado] = useState(false);
   const [chipado, setChipado] = useState(false);
-  
+
   function handleSubmit(){
     const data = {
       name,
@@ -198,6 +198,3 @@ const iconsStyle = StyleSheet.create({
   }
 })
 export default CreatePet;
-
-
-
