@@ -11,7 +11,7 @@ class UserController {
 
     const user = await User.create(request.body);
 
-    return response.json({ user });
+    return response.json(user);
   }
 
   async list(request, response) {
@@ -27,13 +27,9 @@ class UserController {
       return response.status(400).json({ error: 'User not find' });
     }
 
-    const {
-      name, email, phone, state, city,
-    } = await userData.update(request.body);
+    const user = await userData.update(request.body);
 
-    return response.json({
-      name, email, phone, state, city,
-    });
+    return response.json(user);
   }
 
   async remove(request, response) {

@@ -14,16 +14,25 @@ module.exports = {
     image: Sequelize.STRING,
     sex: Sequelize.CHAR(1),
     latitude: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING,
       allowNull: true,
     },
     longitude: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING,
       allowNull: true,
     },
     is_lost: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
+    },
+    type: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    items: {
+      type: Sequelize.ARRAY(Sequelize.STRING),
+      allowNull: true,
     },
     id_user: {
       type: Sequelize.INTEGER,
@@ -35,7 +44,7 @@ module.exports = {
     },
     created_at: {
       type: Sequelize.DATE,
-      allowNull: false,
+      allowNull: true,
       defaultValue: Sequelize.NOW,
     },
     updated_at: {

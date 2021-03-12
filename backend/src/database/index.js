@@ -12,6 +12,7 @@ const models = [User, Pets, Favorites];
 class Database {
   constructor() {
     this.init();
+    this.mongo();
   }
 
   init() {
@@ -20,12 +21,18 @@ class Database {
     models.map((model) => model.init(this.connection));
   }
 
-  // mongo() {
-  //   this.mongoConnection = mongoose.connect(
-  //     'mongodb://localhost:27017/adocao',
-  //     { useNewUrlParser: true, useFindAndModify: true },
-  //   );
-  // }
+  mongo() {
+    this.mongoConnection = mongoose.connect(
+      'mongodb+srv://adocao:ekIIhWBsUNb9as29@cluster0.brtp0.mongodb.net/adocao?retryWrites=true&w=majority',
+      { useNewUrlParser: true, useFindAndModify: true, useUnifiedTopology: true },
+    );
+
+    const { connection } = mongoose;
+
+    connection.once('open', () => {
+      console.log('MongoDB database connection established successsfuly');
+    });
+  }
 }
 
 export default new Database();

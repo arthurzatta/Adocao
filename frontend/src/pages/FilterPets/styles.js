@@ -10,9 +10,7 @@ export const SubmitButton = styled(Button)`
 export const Form = styled.ScrollView.attrs({
   showsVerticalScrollIndicator: false,
 })`
-  margin-top: 0px;
-  padding: 10px 10px;
-  background-color: rgba(246, 246, 246, 1);
+  margin-top: 50px;
 `;
 
 export const FormInput = styled(Input)`
@@ -34,14 +32,15 @@ export const Header = styled.View`
 
 export const IconContainer = styled.View`
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin: 20px 10px;
-`
+`;
 
 export const IconBox = styled.Pressable`
   border-style: solid;
   border-width: 1px;
   border-radius: 15px;
-  padding: 10px;
-  margin: 0px 5px; 
-`
+  height: 84px;
+  width: 84px;
+  padding-top: 15px;
+`;

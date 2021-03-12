@@ -1,18 +1,25 @@
 import mongoose from 'mongoose';
 
 const NotificationSchema = new mongoose.Schema({
-  content: {
+  title: {
     type: String,
     required: true,
   },
-  user: {
+  subtitle: {
+    type: String,
+    required: true,
+  },
+  type: {
+    type: String,
+    required: true,
+  },
+  user_id: {
     type: Number,
     required: true,
   },
-  read: {
-    type: Boolean,
+  pet_id: {
+    type: Number,
     required: true,
-    default: false,
   },
 }, {
   timestamps: true,

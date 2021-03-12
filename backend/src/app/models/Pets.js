@@ -8,6 +8,8 @@ class Pets extends Model {
         description: Sequelize.STRING,
         image: Sequelize.STRING,
         sex: Sequelize.CHAR(1),
+        type: Sequelize.STRING,
+        items: Sequelize.ARRAY(Sequelize.STRING),
         latitude: Sequelize.DECIMAL,
         longitude: Sequelize.DECIMAL,
         is_lost: Sequelize.BOOLEAN,
