@@ -24,7 +24,6 @@ export default function Home({ navigation }) {
         Authorization: `Bearer ${token}`
       }
     });
-
     setPets(response.data);
   };
 
@@ -62,7 +61,7 @@ export default function Home({ navigation }) {
                 <View style={{ flex: 1, paddingTop: 6 }}>
                   <View style={{ flexDirection: 'row' }}>
                     <Name>{pet.name}</Name>
-                    {pet.sex === 'M' ? (
+                    {pet.sex === 'm' ? (
                       < Icon style={{ paddingTop: 6, paddingLeft: 10 }} name='male' size={22} color={'#78CEFF'} />
                     ) : (
                         <Icon style={{ paddingTop: 6, paddingLeft: 10 }} name='female' size={22} color={'#FF93B5'} />

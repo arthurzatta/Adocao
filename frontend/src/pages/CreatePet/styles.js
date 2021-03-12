@@ -3,11 +3,13 @@ import Button from '../../Components/Button';
 import Input from '../../Components/Input';
 
 export const SubmitButton = styled(Button)`
-  margin: 230px;
+  margin: 30px;
   align-self: center;
 `;
 
-export const Form = styled.View`
+export const Form = styled.ScrollView.attrs({
+  showsVerticalScrollIndicator: false,
+})`
   margin-top: 50px;
 `;
 

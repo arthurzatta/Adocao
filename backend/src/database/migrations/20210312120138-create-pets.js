@@ -44,7 +44,7 @@ module.exports = {
     },
     created_at: {
       type: Sequelize.DATE,
-      allowNull: false,
+      allowNull: true,
       defaultValue: Sequelize.NOW,
     },
     updated_at: {

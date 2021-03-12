@@ -58,12 +58,27 @@ const Filter = ({ navigation }) => {
     });
   }, [selectedUf]);
 
+  async function filterSubmit(){
+    const data = {
+      nameOwner,
+      selectedUf,
+      selectedCity,
+      type,
+      sex,
+      distance,
+    }
+    const response = await api.post('/pets/filter',data);
+    navigation.navigate('Home', response);
+  }
 
   return (
     <View style={styles.container}>
       <Form style={styles.form}>
         <Header>
-          <Text style={styles.title}>Filtrar</Text>
+        <View style={styles.closeCreate}>
+            <Icon name='close' style={styles.closeIcon} onPress={() => navigation.pop()} />
+            <Text style={styles.title}>Filtrar</Text>
+          </View>          
           <Text style={styles.clean}>Limpar</Text>
         </Header>
 
@@ -197,7 +212,7 @@ const Filter = ({ navigation }) => {
 
         </IconContainer>
 
-        <SubmitButton style={styles.button}>
+        <SubmitButton style={styles.button} onPress={filterSubmit}>
           <Text style={styles.buttonText}>Filtrar</Text>
         </SubmitButton>
       </Form>
@@ -219,6 +234,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Medium',
     fontSize: 18,
     color: '#FF93B5'
+  },
+  closeIcon: {
+    fontSize: 30,
+    marginRight: 5,
+    color:'#FF93B5',
+  },
+  closeCreate: {
+    flexDirection: 'row',
   },
   pickerContainer: {
     flexDirection: 'row',
