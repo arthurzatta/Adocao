@@ -14,13 +14,14 @@ import api from '../../services/api';
 const Filter = ({ navigation }) => {
   const [nameOwner, setNameOwner] = useState('');
   const [distance, setDistance] = useState(1);
-  const [sex, setSex] = useState('true');
+  const [sex, setSex] = useState(true);
   const [type, setType] = useState('');
 
   const [ufs, setUfs] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedUf, setSelectedUf] = useState("0");
   const [selectedCity, setSelectedCity] = useState("0");
+
   //Estados dos icones
   const [vacinado, setVacinado] = useState(false);
   const [castrado, setCastrado] = useState(false);
@@ -58,12 +59,27 @@ const Filter = ({ navigation }) => {
     });
   }, [selectedUf]);
 
+  async function filterSubmit(){
+    const data = {
+      nameOwner,
+      selectedUf,
+      selectedCity,
+      type,
+      sex,
+      distance,
+    }
+    const response = await api.post('/pets/filter',data);
+    navigation.navigate('Home', response);
+  }
 
   return (
     <View style={styles.container}>
       <Form style={styles.form}>
         <Header>
-          <Text style={styles.title}>Filtrar</Text>
+        <View style={styles.closeCreate}>
+            <Icon name='close' style={styles.closeIcon} onPress={() => navigation.pop()} />
+            <Text style={styles.title}>Filtrar</Text>
+          </View>          
           <Text style={styles.clean}>Limpar</Text>
         </Header>
 
@@ -143,18 +159,18 @@ const Filter = ({ navigation }) => {
           <TLabel>Macho</TLabel>
           <RadioButton.Item
             color={'#FF93B5'}
-            value={'true'}
+            value={true}
             style={{marginTop: 15}}
-            status={sex === 'true' ? 'checked' : 'unchecked'}
-            onPress={() => setSex('true')}
+            status={sex  ? 'checked' : 'unchecked'}
+            onPress={() => setSex(true)}
             />
           <TLabel>Fêmea</TLabel>
           <RadioButton.Item
             color={'#FF93B5'}
             style={{marginTop: 15}}
-            value={'false'}
-            status={sex === 'false' ? 'checked' : 'unchecked'}
-            onPress={() => setSex('false')}
+            value={false}
+            status={!sex ? 'checked' : 'unchecked'}
+            onPress={() => setSex(false)}
           />
         </View>
 
@@ -197,7 +213,7 @@ const Filter = ({ navigation }) => {
 
         </IconContainer>
 
-        <SubmitButton style={styles.button}>
+        <SubmitButton style={styles.button} onPress={filterSubmit}>
           <Text style={styles.buttonText}>Filtrar</Text>
         </SubmitButton>
       </Form>
@@ -219,6 +235,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Medium',
     fontSize: 18,
     color: '#FF93B5'
+  },
+  closeIcon: {
+    fontSize: 30,
+    marginRight: 5,
+    color:'#FF93B5',
+  },
+  closeCreate: {
+    flexDirection: 'row',
   },
   pickerContainer: {
     flexDirection: 'row',

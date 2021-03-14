@@ -6,7 +6,7 @@ export const Title = styled.Text`
   font-size: 32;
 `;
 
-export const Box = styled.View`
+export const Box = styled.Pressable`
   margin-bottom: 25px;
   width: 350px;
   height: 369px;

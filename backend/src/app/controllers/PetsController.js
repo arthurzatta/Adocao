@@ -105,6 +105,17 @@ class PetsController {
     return response.json(petsData);
   }
 
+  async listById(request, response) {
+    const { id } = request.params;
+    const data = await Pets.findByPk(id);
+
+    if (!data) {
+      return response.status(204).json({ error: 'No pets' });
+    }
+
+    return response.json(data);
+  }
+
   async filter(request, response) {
     const user = await User.findByPk(request.userId);
     if (!user) {
