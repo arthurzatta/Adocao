@@ -75,6 +75,13 @@ class PetsController {
       if (notifications) {
         await Notification.insertMany(notifications);
       }
+    } else {
+      pet = await Pets.create({
+        latitude: petObj.latitude,
+        longitude: petObj.longitude,
+        id_user: user.id,
+        ...petObj,
+      });
     }
     return response.json(pet);
   }
