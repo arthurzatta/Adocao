@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
-import { FAB } from 'react-native-paper';
+import { View,StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { FAB} from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import Header from '../../Components/Header';
-import { Title, Distance, Box, Name, Img, Button } from './styles';
+import { Title, Distance, Box, Name, Img } from './styles';
 
 import api from '../../services/api';
 
@@ -14,8 +14,12 @@ export default function Home({ navigation }) {
   const [pets, setPets] = useState([]);
   const token = useSelector(state => state.auth.token);
 
+  const [fab, setFab] = useState({ open: false });
+  const onStateChange = ({ open }) => setFab({ open });
+  const { open } = fab;
+
   function navigateToDetail(pet) {
-    navigation.navigate();
+    navigation.navigate('DescriptionPet', {id: pet.id});
   }
 
   async function loadingPets() {
@@ -56,7 +60,9 @@ export default function Home({ navigation }) {
         renderItem={({ item: pet }) => (
           <>
             <View style={styles.container}>
-              <Box style={styles.box}>
+              <Box style={styles.box}
+                onPress={() => navigateToDetail(pet)}
+              >
                 <Img source={{ uri: pet.image }} />
                 <View style={{ flex: 1, paddingTop: 6 }}>
                   <View style={{ flexDirection: 'row' }}>
@@ -82,23 +88,37 @@ export default function Home({ navigation }) {
         )}
       />
 
-      <FAB
+      <FAB.Group
         icon='plus'
-        color='#fff'
         style={styles.fab}
+        fabStyle={{backgroundColor: '#EA5455'}}
+        color='#fff'
+        open={open}
         accessibilityLabel='default'
-        onPress={() => navigation.navigate('CreatePet')}
+        actions={[
+          {
+            icon: 'dog',
+            label: 'Criar adoção',
+            onPress: (() => navigation.navigate('CreatePet'))
+          },
+          {
+            icon: 'alert-circle',
+            label: 'Criar alerta'  
+          }
+        ]}
+        onStateChange={onStateChange}
+        onPress={() => {}}
       />
     </>
+
   );
 }
 
 const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
-    right: 25,
-    bottom: 23,
-    backgroundColor: '#EA5455'
+    // right: 25,
+    // bottom: 23,
   },
   favorite: {
     position: 'absolute',

@@ -4,7 +4,7 @@ import { FAB } from 'react-native-paper';
 
 export const { height,width } = Dimensions.get('window');
 
-export const Container = styled.View` 
+export const Container = styled.ScrollView` 
   border-radius: 16px;
   background-color: rgba(246, 246, 246, 1);
   position: absolute;
@@ -13,9 +13,6 @@ export const Container = styled.View`
   right: 20px;
   width: ${width-40}px;
 `
-export const Form = styled.View`
-  margin: 20px;
-`;
 
 export const IconContainer = styled.View`
   flex-direction: row;
@@ -23,6 +20,7 @@ export const IconContainer = styled.View`
   margin: 3px; 
   
 `;
+
 export const IconButton = styled(FAB)`
   margin: 15px;
   background-color: rgba(246, 246, 246, 1);

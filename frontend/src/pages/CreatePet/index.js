@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { RadioButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -7,14 +7,12 @@ import IconIO from 'react-native-vector-icons/Ionicons';
 import IconIsto from 'react-native-vector-icons/Fontisto';
 import { SubmitButton, FormInput, TLabel, Header, Form, IconBox, IconContainer } from './styles';
 import api from '../../services/api';
-import { Description } from '../Notifications/styles';
 
 const CreatePet = ({ navigation }) => {
   const [name, setName] = useState();
-  const [sex, setSex] = useState('true');
+  const [sex, setSex] = useState(true);
   const [type, setType] = useState('');
   const [description, setDescription] = useState();
-
   //Estados dos icones
   const [vacinado, setVacinado] = useState();
   const [castrado, setCastrado] = useState();
@@ -50,7 +48,10 @@ const CreatePet = ({ navigation }) => {
             <Icon name='close' style={styles.closeIcon} onPress={() => navigation.pop()} />
             <Text style={styles.title}>Criar</Text>
           </View>
-          <Text style={styles.clean}>Limpar</Text>
+          <Text 
+            style={styles.clean} 
+          >
+            Limpar</Text>
         </Header>
 
         <TLabel>Nome do pet:</TLabel>
@@ -97,16 +98,16 @@ const CreatePet = ({ navigation }) => {
             color={'#FF93B5'}
             value={'true'}
             style={{marginTop: 15}}
-            status={sex === 'true' ? 'checked' : 'unchecked'}
-            onPress={() => setSex('true')}
+            status={sex  ? 'checked' : 'unchecked'}
+            onPress={() => setSex(true)}
             />
           <TLabel>Fêmea</TLabel>
           <RadioButton.Item
             color={'#FF93B5'}
             style={{marginTop: 15}}
             value={'false'}
-            status={sex === 'false' ? 'checked' : 'unchecked'}
-            onPress={() => setSex('false')}
+            status={!sex ? 'checked' : 'unchecked'}
+            onPress={() => setSex(false)}
           />
         </View>
 

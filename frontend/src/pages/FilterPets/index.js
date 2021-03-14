@@ -14,7 +14,7 @@ import api from '../../services/api';
 const Filter = ({ navigation }) => {
   const [nameOwner, setNameOwner] = useState('');
   const [distance, setDistance] = useState(1);
-  const [sex, setSex] = useState('true');
+  const [sex, setSex] = useState(true);
   const [type, setType] = useState('');
 
   const [ufs, setUfs] = useState([]);
@@ -159,18 +159,18 @@ const Filter = ({ navigation }) => {
           <TLabel>Macho</TLabel>
           <RadioButton.Item
             color={'#FF93B5'}
-            value={'true'}
+            value={true}
             style={{marginTop: 15}}
-            status={sex === 'true' ? 'checked' : 'unchecked'}
-            onPress={() => setSex('true')}
+            status={sex  ? 'checked' : 'unchecked'}
+            onPress={() => setSex(true)}
             />
           <TLabel>Fêmea</TLabel>
           <RadioButton.Item
             color={'#FF93B5'}
             style={{marginTop: 15}}
-            value={'false'}
-            status={sex === 'false' ? 'checked' : 'unchecked'}
-            onPress={() => setSex('false')}
+            value={false}
+            status={!sex ? 'checked' : 'unchecked'}
+            onPress={() => setSex(false)}
           />
         </View>
 

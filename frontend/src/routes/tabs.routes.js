@@ -4,7 +4,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Home from '../pages/Home';
 import Notification from '../pages/Notifications';
 import Profile from '../pages/Profile';
-import DescriptionPet from '../pages/DescriptionPet';
 
 const Tab = createBottomTabNavigator();
 
@@ -31,7 +30,7 @@ export default function TabsRoutes() {
         showLabel: false,
       }}
     >
-      <Tab.Screen name="Home" component={DescriptionPet} />
+      <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Notification" component={Notification} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
