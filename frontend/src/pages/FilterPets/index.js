@@ -1,26 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import RNPickerSelect from 'react-native-picker-select';
 import { RadioButton } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
-import { SubmitButton, FormInput, TLabel, Header, Form, IconBox, IconContainer } from './styles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconIO from 'react-native-vector-icons/Ionicons';
 import IconIsto from 'react-native-vector-icons/Fontisto';
 
+import { SubmitButton, FormInput, TLabel, Header, Form, IconBox, IconContainer } from './styles';
 import axios from 'axios';
 import api from '../../services/api';
 
 const Filter = ({ navigation }) => {
-  const [nameOwner, setNameOwner] = useState('');
-  const [distance, setDistance] = useState(1);
-  const [sex, setSex] = useState(true);
-  const [type, setType] = useState('');
+  const user = useSelector(state => state.user.user);
+  const token = useSelector(state => state.auth.token);
+
+  const [name, setName] = useState();
+  const [radius, setRadius] = useState(1);
+  const [selectedRadius, setSelectedRadius] = useState();
+  const [sex, setSex] = useState();
+  const [type, setType] = useState();
 
   const [ufs, setUfs] = useState([]);
   const [cities, setCities] = useState([]);
-  const [selectedUf, setSelectedUf] = useState("0");
-  const [selectedCity, setSelectedCity] = useState("0");
+  const [selectedUf, setSelectedUf] = useState(user.state);
+  const [selectedCity, setSelectedCity] = useState(user.city);
 
   //Estados dos icones
   const [vacinado, setVacinado] = useState(false);
@@ -59,27 +64,29 @@ const Filter = ({ navigation }) => {
     });
   }, [selectedUf]);
 
-  async function filterSubmit(){
-    const data = {
-      nameOwner,
-      selectedUf,
-      selectedCity,
+  async function filterSubmit() {
+    const response = await api.post('/pets/filter', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      name,
+      state: selectedUf,
+      city: selectedCity,
       type,
       sex,
-      distance,
-    }
-    const response = await api.post('/pets/filter',data);
-    navigation.navigate('Home', response);
+      selectedRadius,
+    });
+    navigation.navigate('Home', { pets: response.data });
   }
 
   return (
     <View style={styles.container}>
       <Form style={styles.form}>
         <Header>
-        <View style={styles.closeCreate}>
+          <View style={styles.closeCreate}>
             <Icon name='close' style={styles.closeIcon} onPress={() => navigation.pop()} />
             <Text style={styles.title}>Filtrar</Text>
-          </View>          
+          </View>
           <Text style={styles.clean}>Limpar</Text>
         </Header>
 
@@ -88,13 +95,13 @@ const Filter = ({ navigation }) => {
           autoCapitalize="none"
           autoCorrect={false}
           placeholder=""
-          value={nameOwner}
-          onChangeText={setNameOwner}
+          value={name}
+          onChangeText={setName}
         />
         <View>
           <View style={sliderStyles.sliderLabel}>
             <TLabel>Distância:</TLabel>
-            <TLabel>{Math.round(distance * 100) / 100}km</TLabel>
+            <TLabel>{Math.round(radius * 100) / 100}km</TLabel>
           </View>
           <Slider
             style={sliderStyles.slider}
@@ -103,7 +110,7 @@ const Filter = ({ navigation }) => {
             maximumTrackTintColor='#FF93B5'
             minimumValue={1}
             maximumValue={10}
-            onValueChange={(value) => setDistance(value)}
+            onValueChange={(value) => setSelectedRadius(value)}
           />
         </View>
 
@@ -159,18 +166,18 @@ const Filter = ({ navigation }) => {
           <TLabel>Macho</TLabel>
           <RadioButton.Item
             color={'#FF93B5'}
-            value={true}
-            style={{marginTop: 15}}
-            status={sex  ? 'checked' : 'unchecked'}
-            onPress={() => setSex(true)}
-            />
+            value={'M'}
+            style={{ marginTop: 15 }}
+            status={sex === 'M' ? 'checked' : 'unchecked'}
+            onPress={() => setSex('M')}
+          />
           <TLabel>Fêmea</TLabel>
           <RadioButton.Item
             color={'#FF93B5'}
-            style={{marginTop: 15}}
-            value={false}
-            status={!sex ? 'checked' : 'unchecked'}
-            onPress={() => setSex(false)}
+            style={{ marginTop: 15 }}
+            value={'F'}
+            status={sex === 'F' ? 'checked' : 'unchecked'}
+            onPress={() => setSex('F')}
           />
         </View>
 
@@ -239,7 +246,7 @@ const styles = StyleSheet.create({
   closeIcon: {
     fontSize: 30,
     marginRight: 5,
-    color:'#FF93B5',
+    color: '#FF93B5',
   },
   closeCreate: {
     flexDirection: 'row',

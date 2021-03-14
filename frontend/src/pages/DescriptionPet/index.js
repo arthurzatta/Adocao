@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import Header from '../../Components/Header/index';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Container, IconButton, IconContainer, Form, TLabel, Img } from './styles';
-import  Icon  from 'react-native-vector-icons/MaterialIcons';  
-import  IconIO  from 'react-native-vector-icons/Ionicons';  
-import  IconIsto  from 'react-native-vector-icons/Fontisto';  
+import  Icon  from 'react-native-vector-icons/MaterialIcons';
+import  IconIO  from 'react-native-vector-icons/Ionicons';
+import  IconIsto  from 'react-native-vector-icons/Fontisto';
 import api from '../../services/api';
 
 const DescriptionPet = (({navigation, route}) => {
@@ -14,6 +14,7 @@ const DescriptionPet = (({navigation, route}) => {
 
   const [pet, setPet] = useState({});
   const [items, setItems] = useState([]);
+
   async function petDetails(){
     const { id } = route.params;
     const response = await api.get(`/pets/${id}`, {
@@ -34,18 +35,18 @@ const DescriptionPet = (({navigation, route}) => {
   return (
     <>
       <Header>
-        <Icon name='arrow-back' 
+        <Icon name='arrow-back'
           onPress={() => navigation.pop()}
           style={{ fontSize: 40, color: '#FFFFFF'}}
           />
-      </Header>  
-      
+      </Header>
+
       <Container style={styles.box}>
         <IconContainer>
           <IconButton icon='message' color='rgba(95,169,61,1)' />
           <IconButton icon='heart-outline' color='rgba(215,68,62,1)'/>
         </IconContainer>
-        
+
         <View style={{margin: 20}}>
           <View>
             <View style={styles.infos}>
@@ -54,7 +55,7 @@ const DescriptionPet = (({navigation, route}) => {
                       < IconIO style={styles.icon} name='male'  color={'#78CEFF'} />
                     ) : (
                         <IconIO style={styles.icon} name='female' color={'#FF93B5'} />
-                      )} 
+                      )}
             </View>
               <Text style={styles.subtitle}>Distancia</Text>
           </View>
@@ -67,7 +68,7 @@ const DescriptionPet = (({navigation, route}) => {
                 <View style={statusStyle.status}>
                     <IconIsto name='injection-syringe'/>
                     <TLabel>Vacinado:</TLabel>
-                    {items[0] 
+                    {items[0]
                       ? (<Icon color={'#7BE26B'} name='check'/>)
                       : (<Icon color={'#EA5455'} name='close'/>)
                     }
@@ -75,7 +76,7 @@ const DescriptionPet = (({navigation, route}) => {
                 <View style={statusStyle.status}>
                   <Icon name='pets'/>
                   <TLabel>Castrado:</TLabel>
-                  {items[1] 
+                  {items[1]
                     ? (<Icon color={'#7BE26B'} name='check'/>)
                     : (<Icon color={'#EA5455'} name='close'/>)
                   }
@@ -85,15 +86,15 @@ const DescriptionPet = (({navigation, route}) => {
               <View style={statusStyle.status}>
                 <IconIsto name='drug-pack'/>
                 <TLabel>Vermifugado:</TLabel>
-                {items[2] 
+                {items[2]
                   ? (<Icon color={'#7BE26B'} name='check'/>)
                   : (<Icon color={'#EA5455'} name='close'/>)
-                } 
+                }
               </View>
               <View style={statusStyle.status}>
                 <IconIO name='hardware-chip-outline'/>
                 <TLabel>Chipado:</TLabel>
-                {items[3] 
+                {items[3]
                   ? (<Icon color={'#7BE26B'} name='check'/> )
                   : (<Icon color={'#EA5455'} name='close'/> )
                 }

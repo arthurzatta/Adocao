@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { View,StyleSheet, TouchableOpacity, FlatList } from 'react-native';
-import { FAB} from 'react-native-paper';
+import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { FAB } from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -10,7 +10,7 @@ import { Title, Distance, Box, Name, Img } from './styles';
 
 import api from '../../services/api';
 
-export default function Home({ navigation }) {
+export default function Home({ navigation, route }) {
   const [pets, setPets] = useState([]);
   const token = useSelector(state => state.auth.token);
 
@@ -19,16 +19,20 @@ export default function Home({ navigation }) {
   const { open } = fab;
 
   function navigateToDetail(pet) {
-    navigation.navigate('DescriptionPet', {id: pet.id});
+    navigation.navigate('DescriptionPet', { id: pet.id });
   }
 
   async function loadingPets() {
-    const response = await api.get('/pets', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-    setPets(response.data);
+    let pets = route.params;
+    if (!pets) {
+      const response = await api.get('/pets', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      pets = response.data;
+    }
+    setPets(pets);
   };
 
   useEffect(() => {
@@ -82,7 +86,7 @@ export default function Home({ navigation }) {
               color='#D7443E'
               style={styles.favorite}
               accessibilityLabel='default'
-              onPress={() => {}}
+              onPress={() => { }}
             />
           </>
         )}
@@ -91,7 +95,7 @@ export default function Home({ navigation }) {
       <FAB.Group
         icon='plus'
         style={styles.fab}
-        fabStyle={{backgroundColor: '#EA5455'}}
+        fabStyle={{ backgroundColor: '#EA5455' }}
         color='#fff'
         open={open}
         accessibilityLabel='default'
@@ -103,11 +107,11 @@ export default function Home({ navigation }) {
           },
           {
             icon: 'alert-circle',
-            label: 'Criar alerta'  
+            label: 'Criar alerta'
           }
         ]}
         onStateChange={onStateChange}
-        onPress={() => {}}
+        onPress={() => { }}
       />
     </>
 
