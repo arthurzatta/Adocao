@@ -28,6 +28,7 @@ const Profile = ({ navigation }) => {
           </View>
         </View>
       </Header>
+      <ScrollView style={{flex: 1}}>
       <Container>
         <Box style={styles.box} onPress={() => navigation.navigate('MyAccount')}>
           <Icon name='card-account-details' size={40} color={'#4B4B4B'} />
@@ -54,7 +55,7 @@ const Profile = ({ navigation }) => {
           </View>
         </Box>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 10 }}>
           <SmallBox style={styles.smallBox}>
             <IconFA name='question-circle' size={40} color={'#4B4B4B'} />
             <Text style={styles.textBox2}>Sobre</Text>
@@ -65,6 +66,7 @@ const Profile = ({ navigation }) => {
           </SmallBox>
         </View>
       </Container>
+      </ScrollView>
     </>
   );
 }

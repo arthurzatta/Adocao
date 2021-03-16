@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Header from '../../Components/Header/index';
-import Background from '../../Components/Background/index';
-import { View, Text, StyleSheet, Dimensions, Image, ScrollView} from 'react-native';
-import { Container, IconButton, IconContainer, Form, TLabel, Img, width, height } from './styles';
+import { View, Text, StyleSheet, ScrollView} from 'react-native';
+import { Container, IconButton, IconContainer, TLabel, Img, width, UserImg } from './styles';
 import  Icon  from 'react-native-vector-icons/MaterialIcons';
 import  IconIO  from 'react-native-vector-icons/Ionicons';
 import  IconIsto  from 'react-native-vector-icons/Fontisto';
@@ -11,31 +10,39 @@ import api from '../../services/api';
 
 const DescriptionPet = (({navigation, route}) => {
   const token = useSelector(state => state.auth.token);
-  const user  = useSelector(state => state.user.user);
 
   const [pet, setPet] = useState({});
   const [items, setItems] = useState([]);
-  const [stars, setStars] = useState({});
+  const [owner, setOwner] = useState({});
   
-  async function petDetails(){
+  async function Details(){
     const { id } = route.params;
     const response = await api.get(`/pets/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
+    ownerDetails(response.data.id_user);
     setPet(response.data);
     setItems(response.data.items);
   }
-  
 
+  async function ownerDetails(id) {
+    const response = await api.get(`/user/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    setOwner(response.data);
+  }
+  
   useEffect(() => {
-    petDetails()
+    Details();
   }, []);
 
   return (
     <>
-      <ScrollView style={{flex: 1}} containerContentStyle={{flexGrow:1}}>
+      <ScrollView style={{flex: 1}} containerContentStyle={{flexGrow:1}} showsVerticalScrollIndicator={false}>
         <Header>
             <Icon name='arrow-back'
               onPress={() => navigation.pop()}
@@ -60,7 +67,8 @@ const DescriptionPet = (({navigation, route}) => {
                         < IconIO style={styles.icon} name='male'  color={'#78CEFF'} />
                       ) : (
                           <IconIO style={styles.icon} name='female' color={'#FF93B5'} />
-                        )}
+                        )
+                }
               </View>
                 <Text style={styles.subtitle}>Distancia</Text>
             </View>
@@ -107,11 +115,18 @@ const DescriptionPet = (({navigation, route}) => {
                 </View>
               </View>
             </View>
-            <View style={{paddingTop: 10}}>
-              <Text style={styles.nameOwner}>{user.name}</Text>
-              <Text style={styles.infOwner}>{user.city}</Text>
-              <Text style={styles.infOwner}>{user.phone}</Text>
+
+            <View style={{flexDirection: 'row' ,paddingTop: 10}}>
+              <View style={styles.userImage}>
+                <UserImg source={{uri: owner.image}}/>
+              </View>
+              <View>
+                <Text style={styles.nameOwner}>{owner.name}</Text>
+                <Text style={styles.infOwner}>{owner.city}</Text>
+                <Text style={styles.infOwner}>{owner.phone}</Text>
+              </View>
             </View>
+
           </View>
         </Container>
       </ScrollView>
@@ -122,6 +137,7 @@ const DescriptionPet = (({navigation, route}) => {
 const styles = StyleSheet.create({
   infos: {
     flexDirection: 'row',
+    marginTop: -40,
   },
   title:{
     fontFamily: 'Ubuntu-Bold',
@@ -174,6 +190,14 @@ const styles = StyleSheet.create({
   image: {
     width: width-40, 
     height: 369,
+  },
+  userImage: {
+    width: 60,
+    height: 60,
+    marginRight: 10,
+    borderRadius: 60,
+    borderStyle: 'solid',
+    borderWidth: 1,
   }
 });
 

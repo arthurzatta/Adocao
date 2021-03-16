@@ -42,7 +42,7 @@ export default function Home({ navigation }) {
 
   useEffect(() => {
     loadingPets();
-    loadingFavorites();
+    // loadingFavorites();
   }, []);
 
 

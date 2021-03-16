@@ -8,7 +8,7 @@ import { Container, TitleNotification, Description } from './styles';
 import api from '../../services/api';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const Notifications = () => {
+const Notifications = ({navigation}) => {
   const [notifications, setNotifications] = useState([]);
   const token = useSelector(state => state.auth.token);
 
@@ -40,7 +40,7 @@ const Notifications = () => {
         onEndReachedThershold={0.2}
         renderItem={({ item: notification }) => (
           <>
-            <TouchableOpacity style={styles.boxNotification}>
+            <TouchableOpacity style={styles.boxNotification} onPress={() => navigation.navigate('LostPet')}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                 {notification.type == 'create' ? (
                   <Icon name='dog' size={40} color={'#4B4B4B'} />

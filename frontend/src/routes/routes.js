@@ -8,7 +8,7 @@ import MyAccount from '../pages/MyAccount';
 import CreatePet from '../pages/CreatePet';
 import Filter from '../pages/FilterPets';
 import DescriptionPet from '../pages/DescriptionPet';
-
+import LostPet from '../pages/LostPet';
 import Tabs from './tabs.routes';
 
 const AppStack = createStackNavigator();
@@ -23,6 +23,7 @@ export default function createRouter(signedIn = false) {
           <AppStack.Screen name="CreatePet" component={CreatePet} />
           <AppStack.Screen name="Filter" component={Filter} />
           <AppStack.Screen name="DescriptionPet" component={DescriptionPet} />
+          <AppStack.Screen name="LostPet" component={LostPet} />
         </>
       ) : (
           <>
