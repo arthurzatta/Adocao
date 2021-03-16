@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Header from '../../Components/Header/index';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { Container, IconButton, IconContainer, Form, TLabel, Img } from './styles';
-import  Icon  from 'react-native-vector-icons/MaterialIcons';  
-import  IconIO  from 'react-native-vector-icons/Ionicons';  
-import  IconIsto  from 'react-native-vector-icons/Fontisto';  
+import Background from '../../Components/Background/index';
+import { View, Text, StyleSheet, Dimensions, Image, ScrollView} from 'react-native';
+import { Container, IconButton, IconContainer, Form, TLabel, Img, width, height } from './styles';
+import  Icon  from 'react-native-vector-icons/MaterialIcons';
+import  IconIO  from 'react-native-vector-icons/Ionicons';
+import  IconIsto  from 'react-native-vector-icons/Fontisto';
 import api from '../../services/api';
 
 const DescriptionPet = (({navigation, route}) => {
@@ -14,6 +15,8 @@ const DescriptionPet = (({navigation, route}) => {
 
   const [pet, setPet] = useState({});
   const [items, setItems] = useState([]);
+  const [stars, setStars] = useState({});
+  
   async function petDetails(){
     const { id } = route.params;
     const response = await api.get(`/pets/${id}`, {
@@ -24,91 +27,95 @@ const DescriptionPet = (({navigation, route}) => {
     setPet(response.data);
     setItems(response.data.items);
   }
+  
 
   useEffect(() => {
     petDetails()
   }, []);
 
-
-
   return (
     <>
-      <Header>
-        <Icon name='arrow-back' 
-          onPress={() => navigation.pop()}
-          style={{ fontSize: 40, color: '#FFFFFF'}}
-          />
-      </Header>  
-      
-      <Container style={styles.box}>
-        <IconContainer>
-          <IconButton icon='message' color='rgba(95,169,61,1)' />
-          <IconButton icon='heart-outline' color='rgba(215,68,62,1)'/>
-        </IconContainer>
-        
-        <View style={{margin: 20}}>
-          <View>
-            <View style={styles.infos}>
-              <Text style={styles.title}>{pet.name}</Text>
-              {pet.sex === 'm' ? (
-                      < IconIO style={styles.icon} name='male'  color={'#78CEFF'} />
-                    ) : (
-                        <IconIO style={styles.icon} name='female' color={'#FF93B5'} />
-                      )} 
-            </View>
-              <Text style={styles.subtitle}>Distancia</Text>
+      <ScrollView style={{flex: 1}} containerContentStyle={{flexGrow:1}}>
+        <Header>
+            <Icon name='arrow-back'
+              onPress={() => navigation.pop()}
+              style={{ fontSize: 40, color: '#FFFFFF',paddingBottom: 60, paddingTop: 30}}
+              />
+        </Header>
+          
+        <Container style={styles.box}>
+          <View style={styles.image}>
+            <Img source={{uri: pet.image}}/>
           </View>
+          <IconContainer>
+            <IconButton icon='message' color='rgba(95,169,61,1)' />
+            <IconButton icon='heart-outline' color='rgba(215,68,62,1)'/>
+          </IconContainer>
 
-          <View style={styles.descriptionContainer}>
-            <Text style={styles.description}>{pet.description}</Text>
+          <View style={{margin: 20}}>
+            <View>
+              <View style={styles.infos}>
+                <Text style={styles.title}>{pet.name}</Text>
+                {pet.sex === 'm' ? (
+                        < IconIO style={styles.icon} name='male'  color={'#78CEFF'} />
+                      ) : (
+                          <IconIO style={styles.icon} name='female' color={'#FF93B5'} />
+                        )}
+              </View>
+                <Text style={styles.subtitle}>Distancia</Text>
+            </View>
 
-            <View style={statusStyle.row}>
-              <View style={statusStyle.column}>
-                <View style={statusStyle.status}>
-                    <IconIsto name='injection-syringe'/>
-                    <TLabel>Vacinado:</TLabel>
-                    {items[0] 
+            <View style={styles.descriptionContainer}>
+              <Text style={styles.description}>{pet.description}</Text>
+
+              <View style={statusStyle.row}>
+                <View style={statusStyle.column}>
+                  <View style={statusStyle.status}>
+                      <IconIsto name='injection-syringe'/>
+                      <TLabel>Vacinado:</TLabel>
+                      {items[0]
+                        ? (<Icon color={'#7BE26B'} name='check'/>)
+                        : (<Icon color={'#EA5455'} name='close'/>)
+                      }
+                  </View>
+                  <View style={statusStyle.status}>
+                    <Icon name='pets'/>
+                    <TLabel>Castrado:</TLabel>
+                    {items[1]
                       ? (<Icon color={'#7BE26B'} name='check'/>)
                       : (<Icon color={'#EA5455'} name='close'/>)
                     }
+                  </View>
                 </View>
+                <View style={statusStyle.column}>
                 <View style={statusStyle.status}>
-                  <Icon name='pets'/>
-                  <TLabel>Castrado:</TLabel>
-                  {items[1] 
+                  <IconIsto name='drug-pack'/>
+                  <TLabel>Vermifugado:</TLabel>
+                  {items[2]
                     ? (<Icon color={'#7BE26B'} name='check'/>)
                     : (<Icon color={'#EA5455'} name='close'/>)
                   }
                 </View>
-              </View>
-              <View style={statusStyle.column}>
-              <View style={statusStyle.status}>
-                <IconIsto name='drug-pack'/>
-                <TLabel>Vermifugado:</TLabel>
-                {items[2] 
-                  ? (<Icon color={'#7BE26B'} name='check'/>)
-                  : (<Icon color={'#EA5455'} name='close'/>)
-                } 
-              </View>
-              <View style={statusStyle.status}>
-                <IconIO name='hardware-chip-outline'/>
-                <TLabel>Chipado:</TLabel>
-                {items[3] 
-                  ? (<Icon color={'#7BE26B'} name='check'/> )
-                  : (<Icon color={'#EA5455'} name='close'/> )
-                }
-              </View>
+                <View style={statusStyle.status}>
+                  <IconIO name='hardware-chip-outline'/>
+                  <TLabel>Chipado:</TLabel>
+                  {items[3]
+                    ? (<Icon color={'#7BE26B'} name='check'/> )
+                    : (<Icon color={'#EA5455'} name='close'/> )
+                  }
+                </View>
+                </View>
               </View>
             </View>
+            <View style={{paddingTop: 10}}>
+              <Text style={styles.nameOwner}>{user.name}</Text>
+              <Text style={styles.infOwner}>{user.city}</Text>
+              <Text style={styles.infOwner}>{user.phone}</Text>
+            </View>
           </View>
-          <View style={{paddingTop: 10}}>
-            <Text style={styles.nameOwner}>{user.name}</Text>
-            <Text style={styles.infOwner}>{user.city}</Text>
-            <Text style={styles.infOwner}>{user.phone}</Text>
-          </View>
-        </View>
-      </Container>
-  </>
+        </Container>
+      </ScrollView>
+    </>
   )
 });
 
@@ -155,7 +162,6 @@ const styles = StyleSheet.create({
     paddingTop: 10
   },
   box: {
-    marginTop: 25,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -165,6 +171,10 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
+  image: {
+    width: width-40, 
+    height: 369,
+  }
 });
 
 const statusStyle = StyleSheet.create({

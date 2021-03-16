@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { View,StyleSheet, TouchableOpacity, FlatList } from 'react-native';
-import { FAB} from 'react-native-paper';
+import { FAB } from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -12,12 +12,12 @@ import api from '../../services/api';
 
 export default function Home({ navigation }) {
   const [pets, setPets] = useState([]);
+  const [favorites, setFavorites] = useState([]);
   const token = useSelector(state => state.auth.token);
 
   const [fab, setFab] = useState({ open: false });
   const onStateChange = ({ open }) => setFab({ open });
   const { open } = fab;
-
   function navigateToDetail(pet) {
     navigation.navigate('DescriptionPet', {id: pet.id});
   }
@@ -31,8 +31,18 @@ export default function Home({ navigation }) {
     setPets(response.data);
   };
 
+  async function loadingFavorites() {
+    const response = await api.get('/favorites', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    setFavorites(response.data);
+  };
+
   useEffect(() => {
     loadingPets();
+    loadingFavorites();
   }, []);
 
 
@@ -103,7 +113,8 @@ export default function Home({ navigation }) {
           },
           {
             icon: 'alert-circle',
-            label: 'Criar alerta'  
+            label: 'Criar alerta',  
+            // onPress: (() => {})
           }
         ]}
         onStateChange={onStateChange}
