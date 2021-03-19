@@ -100,6 +100,18 @@ class PetsController {
 
   async listById(request, response) {
     const { id } = request.params;
+    
+    if(!id) {
+      const pet = await Pets.findAll({
+        where: {
+          id_user: request.userId
+        },
+        order: [['created_at', 'DESC']],
+      })
+
+      return response.json(pet);
+    }
+
     const data = await Pets.findByPk(id);
 
     if (!data) {

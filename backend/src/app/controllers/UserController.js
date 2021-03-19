@@ -19,6 +19,11 @@ class UserController {
 
     return response.json(userData);
   }
+  async getById(request, response) {
+    const user = await User.findByPk(request.params.id);
+
+    return response.json(user);
+  }
 
   async update(request, response) {
     const userData = await User.findByPk(request.userId);
