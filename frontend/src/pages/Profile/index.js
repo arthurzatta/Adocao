@@ -28,11 +28,18 @@ const Profile = ({ navigation }) => {
           </View>
         </View>
       </Header>
+      <ScrollView style={{flex: 1}}>
       <Container>
         <Box style={styles.box} onPress={() => navigation.navigate('MyAccount')}>
           <Icon name='card-account-details' size={40} color={'#4B4B4B'} />
           <View>
             <Text style={styles.textBox}>Meus dados</Text>
+          </View>
+        </Box>
+        <Box style={styles.box} onPress={() => navigation.navigate('RegisteredPets')}>
+          <Icon name='dog' size={40} color={'#4B4B4B'} />
+          <View>
+            <Text style={styles.textBox}>Pets Cadastrados</Text>
           </View>
         </Box>
         <Box style={styles.box}>
@@ -41,7 +48,7 @@ const Profile = ({ navigation }) => {
             <Text style={styles.textBox}>Minhas adoções</Text>
           </View>
         </Box>
-        <Box style={styles.box}>
+        <Box style={styles.box} onPress={() => navigation.navigate('Favorites')}>
           <Icon name='heart' size={40} color={'#4B4B4B'} />
           <View>
             <Text style={styles.textBox}>Pets favoritos</Text>
@@ -54,7 +61,7 @@ const Profile = ({ navigation }) => {
           </View>
         </Box>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 10 }}>
           <SmallBox style={styles.smallBox}>
             <IconFA name='question-circle' size={40} color={'#4B4B4B'} />
             <Text style={styles.textBox2}>Sobre</Text>
@@ -65,6 +72,7 @@ const Profile = ({ navigation }) => {
           </SmallBox>
         </View>
       </Container>
+      </ScrollView>
     </>
   );
 }

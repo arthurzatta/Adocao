@@ -17,10 +17,13 @@ routes.post('/sessions', SessionController.store);
 
 routes.use(authMiddleware);
 
+routes.get('/user/:id', UserController.getById);
 routes.delete('/remove', UserController.remove);
 routes.put('/update', UserController.update);
 
 routes.get('/pets', PetsController.list);
+routes.get('/pets/list', PetsController.listById);
+routes.get('/pets/:id', PetsController.listById);
 routes.post('/pets/create', PetsController.create);
 routes.post('/pets/filter', PetsController.filter);
 routes.delete('/pets/remove/:id', PetsController.remove);

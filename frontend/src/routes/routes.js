@@ -7,6 +7,10 @@ import CreateUser from '../pages/CreateUser';
 import MyAccount from '../pages/MyAccount';
 import CreatePet from '../pages/CreatePet';
 import Filter from '../pages/FilterPets';
+import DescriptionPet from '../pages/DescriptionPet';
+import LostPet from '../pages/LostPet';
+import RegisteredPet from '../pages/ResgiteredPets';
+import Favorites from '../pages/Favorites';
 
 import Tabs from './tabs.routes';
 
@@ -21,6 +25,10 @@ export default function createRouter(signedIn = false) {
           <AppStack.Screen name="MyAccount" component={MyAccount} />
           <AppStack.Screen name="CreatePet" component={CreatePet} />
           <AppStack.Screen name="Filter" component={Filter} />
+          <AppStack.Screen name="DescriptionPet" component={DescriptionPet} />
+          <AppStack.Screen name="LostPet" component={LostPet} />
+          <AppStack.Screen name="RegisteredPets" component={RegisteredPet} />
+          <AppStack.Screen name="Favorites" component={Favorites} />
         </>
       ) : (
           <>
