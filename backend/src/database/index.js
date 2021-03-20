@@ -5,9 +5,10 @@ import databaseConfig from '../config/database';
 
 import User from '../app/models/User';
 import Pets from '../app/models/Pets';
+import LostPets from '../app/models/LostPets';
 import Favorites from '../app/models/Favorites';
 
-const models = [User, Pets, Favorites];
+const models = [User, Pets, LostPets, Favorites];
 
 class Database {
   constructor() {
@@ -18,7 +19,9 @@ class Database {
   init() {
     this.connection = new Sequelize(databaseConfig);
 
-    models.map((model) => model.init(this.connection));
+    models
+      .map((model) => model.init(this.connection))
+      .map((model) => model.associate && model.associate(this.connection.models));
   }
 
   mongo() {

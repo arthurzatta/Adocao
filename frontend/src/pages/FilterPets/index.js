@@ -7,12 +7,14 @@ import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconIO from 'react-native-vector-icons/Ionicons';
 import IconIsto from 'react-native-vector-icons/Fontisto';
+import axios from 'axios';
 
 import { SubmitButton, FormInput, TLabel, Header, Form, IconBox, IconContainer } from './styles';
-import axios from 'axios';
-import api from '../../services/api';
+import { filterPets } from '../../store/modules/pets/actions';
 
 const Filter = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   const user = useSelector(state => state.user.user);
   const token = useSelector(state => state.auth.token);
 
@@ -65,18 +67,17 @@ const Filter = ({ navigation }) => {
   }, [selectedUf]);
 
   async function filterSubmit() {
-    const response = await api.post('/pets/filter', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const data = {
       name,
       state: selectedUf,
       city: selectedCity,
       type,
       sex,
       selectedRadius,
-    });
-    navigation.navigate('Home', { pets: response.data });
+    };
+    dispatch(filterPets({ data, token }));
+
+    navigation.navigate('Home');
   }
 
   return (

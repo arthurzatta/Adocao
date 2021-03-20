@@ -8,6 +8,7 @@ import UserController from './app/controllers/UserController';
 import PetsController from './app/controllers/PetsController';
 import FavoritesController from './app/controllers/FavoritesController';
 import NotificationController from './app/controllers/NotificationController';
+import LostPetsController from './app/controllers/LostPetsController';
 
 const routes = new Router();
 
@@ -21,10 +22,14 @@ routes.delete('/remove', UserController.remove);
 routes.put('/update', UserController.update);
 
 routes.get('/pets', PetsController.list);
-routes.get('/pets/:id', PetsController.listById);
+routes.get('/pets/:id', PetsController.show);
 routes.post('/pets/create', PetsController.create);
 routes.post('/pets/filter', PetsController.filter);
 routes.delete('/pets/remove/:id', PetsController.remove);
+
+routes.post('/lost/create', LostPetsController.create);
+routes.get('/lost/:id', LostPetsController.show);
+routes.delete('/lost/remove/:id', LostPetsController.remove);
 
 routes.get('/favorites', FavoritesController.list);
 routes.post('/favorites/create/:id', FavoritesController.create);

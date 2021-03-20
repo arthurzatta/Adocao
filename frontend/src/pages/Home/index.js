@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { FAB } from 'react-native-paper';
 
@@ -8,11 +8,14 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Header from '../../Components/Header';
 import { Title, Distance, Box, Name, Img } from './styles';
 
-import api from '../../services/api';
+import { loadingPets } from '../../store/modules/pets/actions';
 
-export default function Home({ navigation, route }) {
-  const [pets, setPets] = useState([]);
+export default function Home({ navigation }) {
+  const dispatch = useDispatch();
+
+  // const [pets, setPets] = useState();
   const token = useSelector(state => state.auth.token);
+  const pets = useSelector(state => state.pets.pets);
 
   const [fab, setFab] = useState({ open: false });
   const onStateChange = ({ open }) => setFab({ open });
@@ -22,21 +25,8 @@ export default function Home({ navigation, route }) {
     navigation.navigate('DescriptionPet', { id: pet.id });
   }
 
-  async function loadingPets() {
-    let pets = route.params;
-    if (!pets) {
-      const response = await api.get('/pets', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      pets = response.data;
-    }
-    setPets(pets);
-  };
-
   useEffect(() => {
-    loadingPets();
+    dispatch(loadingPets({ token, owner: false }));
   }, []);
 
 
@@ -74,8 +64,8 @@ export default function Home({ navigation, route }) {
                     {pet.sex === 'm' ? (
                       < Icon style={{ paddingTop: 6, paddingLeft: 10 }} name='male' size={22} color={'#78CEFF'} />
                     ) : (
-                        <Icon style={{ paddingTop: 6, paddingLeft: 10 }} name='female' size={22} color={'#FF93B5'} />
-                      )}
+                      <Icon style={{ paddingTop: 6, paddingLeft: 10 }} name='female' size={22} color={'#FF93B5'} />
+                    )}
                   </View>
                   <Distance>2km de distância</Distance>
                 </View>
@@ -107,7 +97,8 @@ export default function Home({ navigation, route }) {
           },
           {
             icon: 'alert-circle',
-            label: 'Criar alerta'
+            label: 'Criar alerta',
+            onPress: (() => navigation.navigate('LostPet'))
           }
         ]}
         onStateChange={onStateChange}
@@ -121,8 +112,6 @@ export default function Home({ navigation, route }) {
 const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
-    // right: 25,
-    // bottom: 23,
   },
   favorite: {
     position: 'absolute',

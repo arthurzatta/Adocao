@@ -23,17 +23,6 @@ export const IconButton = styled(FAB)`
   margin: 15px;
   background-color: rgba(246, 246, 246, 1);
 `
-
-export const StatusColumn = styled.View`
-  flex-direction: column;
-  margin-top: 20px;
-`;
-
-export const StatusRow = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
 export const TLabel = styled.Text`
   color: #4B4B4B;
   font-family: 'Roboto-Medium';

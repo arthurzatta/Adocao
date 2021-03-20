@@ -11,6 +11,12 @@ class Favorites extends Model {
         sequelize,
       },
     );
+    return this;
+  }
+
+  static associate(models) {
+    this.belongsTo(models.User, { foreignKey: 'id_user', as: 'user' });
+    this.belongsTo(models.Pets, { foreignKey: 'id_pet', as: 'pet' });
   }
 }
 
