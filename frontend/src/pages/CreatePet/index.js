@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import { Alert } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { RadioButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -19,25 +20,30 @@ const CreatePet = ({ navigation }) => {
   const [vermifugado, setVermifugado] = useState();
   const [chipado, setChipado] = useState();
 
-  function submitButton(){
+  async function submitButton() {
+    try {
+      if (!name || !type) {
+        return;
+      }
 
-    if(!name || !type){
-      return;
+      const items = [vacinado, castrado, vermifugado, chipado];
+      const data = {
+        name,
+        description,
+        sex: sex ? 'M' : 'F',
+        type,
+        items,
+        is_lost: false,
+
+      }
+
+      const response = await api.post('/pets/create', data);
+      const { id } = response.data;
+      navigation.navigate('DescriptionPet', { id });
+
+    } catch (err) {
+      Alert.alert('Falha na doação', 'Não foi possivel doar o pet, insira todos os dados corretamente');
     }
-
-    const items = [vacinado,castrado,vermifugado,chipado];
-    
-    const data = {
-      name,
-      description,
-      sex: sex ? 'm' : 'f',
-      type,
-      items,
-      is_lost: false,
-
-    }
-    api.post('/pets/create', data);
-    navigation.pop();
   }
 
   return (
@@ -48,8 +54,8 @@ const CreatePet = ({ navigation }) => {
             <Icon name='close' style={styles.closeIcon} onPress={() => navigation.pop()} />
             <Text style={styles.title}>Criar</Text>
           </View>
-          <Text 
-            style={styles.clean} 
+          <Text
+            style={styles.clean}
           >
             Limpar</Text>
         </Header>
@@ -71,7 +77,7 @@ const CreatePet = ({ navigation }) => {
           value={description}
           onChangeText={setDescription}
         />
-                
+
         {/* Tipo */}
         <View>
           <TLabel>Tipo:</TLabel>
@@ -97,14 +103,14 @@ const CreatePet = ({ navigation }) => {
           <RadioButton.Item
             color={'#FF93B5'}
             value={'true'}
-            style={{marginTop: 15}}
-            status={sex  ? 'checked' : 'unchecked'}
+            style={{ marginTop: 15 }}
+            status={sex ? 'checked' : 'unchecked'}
             onPress={() => setSex(true)}
-            />
+          />
           <TLabel>Fêmea</TLabel>
           <RadioButton.Item
             color={'#FF93B5'}
-            style={{marginTop: 15}}
+            style={{ marginTop: 15 }}
             value={'false'}
             status={!sex ? 'checked' : 'unchecked'}
             onPress={() => setSex(false)}
@@ -115,7 +121,7 @@ const CreatePet = ({ navigation }) => {
           {/* Vacinado Icon */}
           <IconBox
             onPress={() => (vacinado === null ? setVacinado('vacinado') : setVacinado(null))}
-            style={{ borderColor: !vacinado  ? '#A4A4A4' : '#FF93B5', }}
+            style={{ borderColor: !vacinado ? '#A4A4A4' : '#FF93B5', }}
           >
             <IconIsto name='injection-syringe' style={[iconsStyle.icons, { color: !vacinado ? '#A4A4A4' : '#FF93B5' }]} />
             <Text style={[iconsStyle.text, { color: !vacinado ? '#A4A4A4' : '#FF93B5' }]}>Vacinado</Text>
@@ -176,7 +182,7 @@ const styles = StyleSheet.create({
   closeIcon: {
     fontSize: 30,
     marginRight: 5,
-    color:'#FF93B5',
+    color: '#FF93B5',
   },
   closeCreate: {
     flexDirection: 'row',

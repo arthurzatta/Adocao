@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Header from '../../Components/Header';
 import { Title, Distance, Box, Name, Img } from './styles';
 
-import { loadingPets } from '../../store/modules/pets/actions';
+import { loadingPets, filterPets } from '../../store/modules/pets/actions';
 
 export default function Home({ navigation }) {
   const dispatch = useDispatch();
@@ -16,6 +16,7 @@ export default function Home({ navigation }) {
   // const [pets, setPets] = useState();
   const token = useSelector(state => state.auth.token);
   const pets = useSelector(state => state.pets.pets);
+  const filtered = useSelector(state => state.pets.filtered);
 
   const [fab, setFab] = useState({ open: false });
   const onStateChange = ({ open }) => setFab({ open });
@@ -29,6 +30,9 @@ export default function Home({ navigation }) {
     dispatch(loadingPets({ token, owner: false }));
   }, []);
 
+  useEffect(() => {
+    dispatch(loadingPets({ token, owner: false }));
+  }, [filtered === true]);
 
   return (
     <>
@@ -61,7 +65,7 @@ export default function Home({ navigation }) {
                 <View style={{ flex: 1, paddingTop: 6 }}>
                   <View style={{ flexDirection: 'row' }}>
                     <Name>{pet.name}</Name>
-                    {pet.sex === 'm' ? (
+                    {pet.sex === 'M' ? (
                       < Icon style={{ paddingTop: 6, paddingLeft: 10 }} name='male' size={22} color={'#78CEFF'} />
                     ) : (
                       <Icon style={{ paddingTop: 6, paddingLeft: 10 }} name='female' size={22} color={'#FF93B5'} />
