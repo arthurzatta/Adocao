@@ -13,11 +13,7 @@ const Notifications = ({navigation}) => {
   const token = useSelector(state => state.auth.token);
 
   async function loadingNotifications() {
-    const response = await api.get('notifications', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    const response = await api.get('notifications');
 
     setNotifications(response.data);
   }

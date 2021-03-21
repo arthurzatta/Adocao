@@ -12,11 +12,7 @@ export default function RegisteredPet({navigation}) {
   const [pets, setPets] = useState([]);
 
   async function loadingPets() {
-    const response = await api.get('/pets/list', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    const response = await api.get('/pets/list');
     setPets(response.data);
   }
 
@@ -29,13 +25,13 @@ export default function RegisteredPet({navigation}) {
         <Header>
           <Icon name="arrow-left-thick" size={22} color={'#fff'} onPress={() => navigation.pop()} />
 					<Text style={styles.title}>Meus pets cadastrados</Text>
-        </Header> 
-			
+        </Header>
+
         <Form style={styles.form}>
 
-          {pets.length !== 0 
+          {pets.length !== 0
           ? (
-            <FlatList 
+            <FlatList
               data={pets}
               style={styles.notificationList}
               renderItem={({ item: pet }) => (
@@ -65,9 +61,9 @@ export default function RegisteredPet({navigation}) {
               <Text style={styles.noFavsText}>Você não possui pets cadastrados</Text>
             </View>
           )}
-            
-        </Form>		
-    </Background>	
+
+        </Form>
+    </Background>
   )
 
 }

@@ -17,11 +17,8 @@ const DescriptionPet = (({ navigation, route }) => {
 
   async function Details() {
     const { id } = route.params;
-    const response = await api.get(`/pets/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    const response = await api.get(`/pets/${id}`);
+
     setOwner(response.data.user);
     setPet(response.data);
     setItems(response.data.items);

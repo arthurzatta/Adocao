@@ -12,11 +12,8 @@ export default function Favorites({navigation}) {
   const [pets, setPets] = useState([]);
 
   async function loadingPets() {
-    const response = await api.get('/favorites', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    const response = await api.get('/favorites');
+
     setPets(response.data);
   }
 
@@ -29,11 +26,11 @@ export default function Favorites({navigation}) {
         <Header>
           <Icon name="arrow-left-thick" size={22} color={'#fff'} onPress={() => navigation.pop()} />
 					<Text style={styles.title}>Pets Favoritos</Text>
-        </Header> 
+        </Header>
 
         <Form style={styles.form}>
         { pets.length !== 0  ? (
-          <FlatList 
+          <FlatList
             data={pets}
             style={styles.notificationList}
             renderItem={({ item: pet }) => (
@@ -64,9 +61,9 @@ export default function Favorites({navigation}) {
                 <Text style={styles.noFavsText}>Você não possui favoritos</Text>
               </View>
             )}
-            
-        </Form>		
-    </Background>	
+
+        </Form>
+    </Background>
   )
 
 }

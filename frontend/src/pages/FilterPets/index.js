@@ -75,7 +75,7 @@ const Filter = ({ navigation }) => {
       sex,
       selectedRadius,
     };
-    dispatch(filterPets({ data, token }));
+    dispatch(filterPets(data));
 
     navigation.navigate('Home');
   }

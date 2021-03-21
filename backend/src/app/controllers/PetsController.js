@@ -1,11 +1,9 @@
-import { Sequelize, QueryTypes } from 'sequelize';
+import { Sequelize } from 'sequelize';
 
 import Pets from '../models/Pets';
 import User from '../models/User';
 import calculateDistance from '../../utils/calculateDistance';
 import Notification from '../schemas/Notification';
-
-import dbConfig from '../../config/database';
 
 class PetsController {
   async create(request, response) {
@@ -161,20 +159,23 @@ class PetsController {
 
   async filter(request, response) {
     const user = await User.findByPk(request.userId);
+
     if (!user) {
       return response.status(400).json({ error: 'User not find' });
     }
 
-    const db = new Sequelize(dbConfig);
     const {
       name, state = user.state, city = user.city, type, sex, items, radius,
     } = request.body;
 
-    let results = await db.query('SELECT P.id, P.name, P.image, P.sex, P.type, P.latitude, P.longitude, P.items, U.name as user_name FROM pets P INNER JOIN users U ON P.id_user = U.id WHERE U.state = :state AND U.city = :city', {
-      replacements: {
-        state, city,
-      },
-      type: QueryTypes.SELECT,
+    let results = await Pets.findAll({
+      attributes: ['id', 'name', 'image', 'sex', 'type', 'latitude', 'longitude'],
+      order: [['created_at', 'DESC']],
+      include: [{
+        model: User,
+        as: 'user',
+        where: { city, state },
+      }],
     });
 
     if (name) {

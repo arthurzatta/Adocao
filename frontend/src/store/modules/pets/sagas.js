@@ -9,9 +9,10 @@ export function* loadingPets({ payload }) {
   const { token, owner } = payload.data;
 
   try {
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+
     const response = yield call(api.get, '/pets', {
       headers: {
-        Authorization: `Bearer ${token}`,
         owner,
       },
     });
@@ -26,15 +27,10 @@ export function* loadingPets({ payload }) {
 }
 
 export function* filterPets({ payload }) {
-  const { token, data } = payload.data;
+  const data = payload.data;
 
   try {
-    const response = yield call(api.post, '/pets/filter', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      data
-    });
+    const response = yield call(api.post, '/pets/filter', data );
 
     yield put(filterPetsSuccess(response.data));
   } catch (err) {
