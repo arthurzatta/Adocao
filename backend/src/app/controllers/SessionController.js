@@ -18,7 +18,7 @@ class SessionController {
     }
 
     const {
-      id, name, phone, image, address, state, city,
+      id, name, phone, image, address, state, city, latitude, longitude,
     } = user;
 
     return res.json({
@@ -31,6 +31,8 @@ class SessionController {
         address,
         state,
         city,
+        latitude,
+        longitude,
       },
       token: jwt.sign({ id }, authConfig.secret, {
         expiresIn: authConfig.expiresIn,
