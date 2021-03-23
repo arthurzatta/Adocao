@@ -15,48 +15,19 @@ class PetsController {
       return response.status(400).json({ error: 'User not find' });
     }
 
-    let pet = [];
-    let centerCoordinates;
-    let title;
-    let subtitle;
-    let type;
+    // Criação do pet para adoção
+    const pet = await Pets.create({
+      latitude: user.latitude,
+      longitude: user.longitude,
+      id_user: user.id,
+      ...petObj,
+    });
 
-    if (!petObj.is_lost) {
-      // Criação do pet para adoção
-      pet = await Pets.create({
-        latitude: user.latitude,
-        longitude: user.longitude,
-        id_user: user.id,
-        ...petObj,
-      });
-
-      // Pega as coordenadas do dono do pet
-      let { latitude: lat1, longitude: long1 } = user;
-      lat1 = Number(lat1);
-      long1 = Number(long1);
-      centerCoordinates = { lat1, long1 };
-
-      title = 'Adoção por perto!';
-      subtitle = 'Pet para adoção à';
-      type = 'create';
-    } else {
-      // Criação do pet perdido
-      pet = await Pets.create({
-        latitude: petObj.latitude,
-        longitude: petObj.longitude,
-        id_user: user.id,
-        ...petObj,
-      });
-
-      // Pega as coordenadas do dono do pet
-      const lat1 = Number(petObj.latitude);
-      const long1 = Number(petObj.longitude);
-      centerCoordinates = { lat1, long1 };
-
-      title = 'Pet Perdido';
-      subtitle = 'Pet perdido à';
-      type = 'lost';
-    }
+    // Pega as coordenadas do dono do pet
+    let { latitude: lat1, longitude: long1 } = user;
+    lat1 = Number(lat1);
+    long1 = Number(long1);
+    const centerCoordinates = { lat1, long1 };
 
     // Percorre um array de usuarios (exceto o dono)
     const { ne } = Sequelize.Op;
@@ -71,6 +42,8 @@ class PetsController {
     // Um array de notificações é criado
     // A notificação é criada para o usuário que está em um raio de 2km
     const notifications = [];
+
+    // eslint-disable-next-line array-callback-return
     await listUsers.map((item) => {
       let { latitude: lat2, longitude: long2 } = item;
       lat2 = Number(lat2);
@@ -86,9 +59,9 @@ class PetsController {
         }
 
         const notification = {
-          title,
-          subtitle: `${subtitle} ${distance}`,
-          type,
+          title: 'Adoção por perto!',
+          subtitle: `Pet para adoção à ${distance}`,
+          type: 'create',
           user_id: item.id,
           pet_id: pet.id,
         };
@@ -110,6 +83,7 @@ class PetsController {
     let petsData;
 
     if (owner === 'false') {
+      const { page = 1 } = request.query;
       const { ne } = Sequelize.Op;
       petsData = await Pets.findAll({
         where: {
@@ -118,6 +92,8 @@ class PetsController {
           },
         },
         order: [['created_at', 'DESC']],
+        limit: 10,
+        offset: (page - 1) * 10,
       });
 
       if (!petsData) {

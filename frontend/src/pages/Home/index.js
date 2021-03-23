@@ -2,18 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { FAB } from 'react-native-paper';
-
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import { loadingPets } from '../../store/modules/pets/actions';
+import calculateDistance from '../../utils/calculateDistance';
 import Header from '../../Components/Header';
 import { Title, Distance, Box, Name, Img } from './styles';
-
-import { loadingPets } from '../../store/modules/pets/actions';
 
 export default function Home({ navigation }) {
   const dispatch = useDispatch();
 
   const token = useSelector(state => state.auth.token);
+  const user = useSelector(state => state.user.user);
   const pets = useSelector(state => state.pets.pets);
 
   const [fab, setFab] = useState({ open: false });
@@ -22,6 +22,33 @@ export default function Home({ navigation }) {
 
   function navigateToDetail(pet) {
     navigation.navigate('DescriptionPet', { id: pet.id });
+  }
+
+  function distance(pet) {
+    try {
+      let { latitude: lat1, longitude: long1 } = user;
+      lat1 = Number(lat1);
+      long1 = Number(long1);
+      const centerCoordinates = { lat1, long1 };
+
+      let { latitude: lat2, longitude: long2 } = pet;
+      lat2 = Number(lat2);
+      long2 = Number(long2);
+      const pointCoordinates = { lat2, long2 };
+
+      let distance = calculateDistance(centerCoordinates, pointCoordinates);
+
+      if (distance < 1) {
+        distance = `${(distance * 1000).toPrecision(3)} m de distância`;
+      } else {
+        distance = `${(distance).toPrecision(3)} Km de distância`;
+      }
+
+      return distance;
+
+    } catch (err) {
+      return 'Distância desconhecida';
+    }
   }
 
   useEffect(() => {
@@ -65,7 +92,7 @@ export default function Home({ navigation }) {
                       <Icon style={{ paddingTop: 6, paddingLeft: 10 }} name='female' size={22} color={'#FF93B5'} />
                     )}
                   </View>
-                  <Distance>2km de distância</Distance>
+                  <Distance>{distance(pet)}</Distance>
                 </View>
               </Box>
             </View>
