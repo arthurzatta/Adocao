@@ -1,3 +1,5 @@
+import '../bootstrap';
+
 import Sequelize from 'sequelize';
 import mongoose from 'mongoose';
 
@@ -26,7 +28,7 @@ class Database {
 
   mongo() {
     this.mongoConnection = mongoose.connect(
-      'mongodb+srv://adocao:ekIIhWBsUNb9as29@cluster0.brtp0.mongodb.net/adocao?retryWrites=true&w=majority',
+      process.env.MONGO_URL,
       { useNewUrlParser: true, useFindAndModify: true, useUnifiedTopology: true },
     );
 
