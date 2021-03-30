@@ -20,7 +20,10 @@ module.exports = {
   collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  collectCoverageFrom: ['src/app/**/*.js'],
+  collectCoverageFrom: [
+    'src/app/controllers/PetsController.js',
+    'src/app/models/Pets.js',
+  ],
 
   // The directory where Jest should output its coverage files
   coverageDirectory: '__tests__/coverage',
@@ -166,7 +169,7 @@ module.exports = {
   // testURL: "http://localhost",
 
   // Setting this value to "fake" allows the use of fake timers for functions such as "setTimeout"
-  // timers: "real",
+  timers: 'fake',
 
   // A map from regular expressions to paths to transformers
   transform: {

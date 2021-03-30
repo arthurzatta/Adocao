@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable array-callback-return */
 import { Sequelize } from 'sequelize';
 
 import Pets from '../models/Pets';
