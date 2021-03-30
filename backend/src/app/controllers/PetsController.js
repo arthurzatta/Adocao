@@ -139,7 +139,7 @@ class PetsController {
     const user = await User.findByPk(request.userId);
 
     if (!user) {
-      return response.status(400).json({ error: 'User not find' });
+      return response.status(400).json({ error: 'User not found' });
     }
 
     const {
