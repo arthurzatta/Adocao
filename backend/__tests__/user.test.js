@@ -7,7 +7,7 @@ import truncate from './utils/truncate';
 import factory from './utils/factories';
 
 describe('User', () => {
-  beforeEach(async () => {
+  afterAll(async () => {
     await truncate();
   });
 
@@ -34,9 +34,10 @@ describe('User', () => {
   it('should encrypt user password when new user created', async () => {
     const user = await factory.attrs('User', {
       password: '0000',
+      password_hash: await bcrypt.hash('0000', 8),
     });
 
-    const compareHash = bcrypt.compare('0000', user.password_hash);
+    const compareHash = await bcrypt.compare('0000', user.password_hash);
 
     expect(compareHash).toBe(true);
   });
