@@ -2,6 +2,7 @@
 /* eslint-disable array-callback-return */
 import { Sequelize } from 'sequelize';
 
+import { restart } from 'nodemon';
 import Pets from '../models/Pets';
 import User from '../models/User';
 import calculateDistance from '../../utils/calculateDistance';
