@@ -25,7 +25,7 @@ describe('Pets', () => {
         radius: -1,
       });
 
-    expect(response.body).toReturn('error');
+    expect(response.body).toReturn({ error: 'Radius cannot be negative' });
   });
 
   it('Verificar o que acontece se passar em estado ou cidade inexistente', async () => {
@@ -59,6 +59,6 @@ describe('Pets', () => {
         name: 21,
       });
 
-    expect(response.body).toReturn('error');
+    expect(response.body).toReturn({ error: 'Name is not a String' });
   });
 });
