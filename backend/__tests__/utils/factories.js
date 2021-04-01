@@ -9,6 +9,7 @@ factory.define('User', User, {
   password: faker.internet.password(),
   state: 'MG',
   city: 'Ipatinga',
+  is_ong: false,
 });
 
 export default factory;

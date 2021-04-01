@@ -3,14 +3,9 @@ import request from 'supertest';
 import bcrypt from 'bcryptjs';
 
 import app from '../src/app';
-import truncate from './utils/truncate';
 import factory from './utils/factories';
 
 describe('User', () => {
-  afterAll(async () => {
-    await truncate();
-  });
-
   it('should be able to register', async () => {
     const user = await factory.attrs('User');
 
