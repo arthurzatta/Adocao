@@ -6,9 +6,13 @@ import app from '../src/app';
 import factory from './utils/factories';
 
 describe('User', () => {
-  it('should be able to register', async () => {
-    const user = await factory.attrs('User');
+  let user = {};
 
+  beforeAll(async () => {
+    user = await factory.attrs('User');
+  });
+
+  it('should be able to register', async () => {
     const response = await request(app)
       .post('/register')
       .send(user);
@@ -17,8 +21,6 @@ describe('User', () => {
   });
 
   it('should not be able to register with duplicated email', async () => {
-    const user = await factory.attrs('User');
-
     const response = await request(app)
       .post('/register')
       .send(user);
@@ -27,12 +29,11 @@ describe('User', () => {
   });
 
   it('should encrypt user password when new user created', async () => {
-    const user = await factory.attrs('User', {
-      password: '0000',
-      password_hash: await bcrypt.hash('0000', 8),
-    });
+    const { password } = user;
 
-    const compareHash = await bcrypt.compare('0000', user.password_hash);
+    const passwordHash = await bcrypt.hash(password, 8);
+
+    const compareHash = await bcrypt.compare(password, passwordHash);
 
     expect(compareHash).toBe(true);
   });
