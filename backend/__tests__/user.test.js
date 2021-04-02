@@ -6,13 +6,9 @@ import app from '../src/app';
 import factory from './utils/factories';
 
 describe('User', () => {
-  let user = {};
-
-  beforeAll(async () => {
-    user = await factory.attrs('User');
-  });
-
   it('should be able to register', async () => {
+    const user = await factory.attrs('User');
+
     const response = await request(app)
       .post('/register')
       .send(user);
@@ -21,6 +17,8 @@ describe('User', () => {
   });
 
   it('should not be able to register with duplicated email', async () => {
+    const user = await factory.attrs('User');
+
     const response = await request(app)
       .post('/register')
       .send(user);
@@ -29,12 +27,39 @@ describe('User', () => {
   });
 
   it('should encrypt user password when new user created', async () => {
-    const { password } = user;
+    const user = await factory.attrs('User', {
+      password: '0000',
+      password_hash: await bcrypt.hash('0000', 8),
+    });
 
-    const passwordHash = await bcrypt.hash(password, 8);
-
-    const compareHash = await bcrypt.compare(password, passwordHash);
+    const compareHash = await bcrypt.compare('0000', user.password_hash);
 
     expect(compareHash).toBe(true);
+  });
+
+  it('should not be able to register with phone > 11 digits', async () => {
+    const user = await factory.attrs('User', {
+      email: 'teste1@email.com',
+      phone: '031994779269',
+    });
+
+    const response = await request(app)
+      .post('/register')
+      .send(user);
+
+    expect(response.status).toBe(400);
+  });
+
+  it('should not be able to register with password == null', async () => {
+    const user = await factory.attrs('User', {
+      email: 'teste2@email.com',
+      password: null,
+    });
+
+    const response = await request(app)
+      .post('/register')
+      .send(user);
+
+    expect(response.status).toBe(400);
   });
 });

@@ -18,7 +18,8 @@
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.3.5",
-    "socketio": "^1.0.0"
+    "socketio": "^1.0.0",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@types/jest": "^26.0.22",
