@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
+import { launchImageLibrary } from 'react-native-image-picker';
 import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconImage from 'react-native-vector-icons/EvilIcons';
 
 import { Header, Form, FormInput, SubmitButton, TLabel, Title } from './styles';
 import Background from '../../Components/Background';
@@ -22,7 +24,7 @@ const MyAccount = ({ navigation }) => {
   }
 
   const dispatch = useDispatch();
-  const user  = useSelector(state => state.user.user);
+  const user = useSelector(state => state.user.user);
 
 
   const [ufs, setUfs] = useState([]);
@@ -31,6 +33,7 @@ const MyAccount = ({ navigation }) => {
   const [selectedCity, setSelectedCity] = useState(user.city);
 
   const [name, setName] = useState(user.name);
+  const [photo, setPhoto] = useState({})
   const [email, setEmail] = useState(user.email);
   const [phone, setPhone] = useState(user.phone);
   const [address, setAdress] = useState(user.address);
@@ -73,12 +76,24 @@ const MyAccount = ({ navigation }) => {
       name,
       email,
       password,
+      image: photo.uri,
       phone,
       address,
       state: selectedUf,
       city: selectedCity,
     }
     dispatch(updateProfileRequest(data))
+  }
+
+  function handlePhoto() {
+    launchImageLibrary({
+      mediaType: 'photo',
+      saveToPhotos: true,
+    }, imagePickerCallback);
+  }
+
+  function imagePickerCallback(data) {
+    setPhoto(data);
   }
 
   return (
@@ -107,6 +122,15 @@ const MyAccount = ({ navigation }) => {
           value={email}
           onChangeText={setEmail}
         />
+
+        <TLabel>Carregar uma foto: </TLabel>
+        <View>
+          <FormInput
+            placeholder=""
+            value={photo.fileName}
+          />
+          <IconImage name="image" size={57} color={'#FF93B5'} style={styles.iconImage} onPress={() => handlePhoto()} />
+        </View>
 
         <TLabel>Número de celular: </TLabel>
         <FormInput
@@ -205,6 +229,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.58,
     shadowRadius: 16.00,
     elevation: 24,
+  },
+  iconImage: {
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    paddingRight: 5,
+    backgroundColor: 'rgba(246, 246, 246, 1)',
   },
   buttonText: {
     paddingTop: 11,

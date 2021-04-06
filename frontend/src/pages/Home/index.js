@@ -21,7 +21,9 @@ export default function Home({ navigation }) {
   const { open } = fab;
 
   function navigateToDetail(pet) {
-    navigation.navigate('DescriptionPet', { id: pet.id });
+    const dist = distance(pet);
+
+    navigation.navigate('DescriptionPet', { id: pet.id, dist });
   }
 
   function distance(pet) {

@@ -12,16 +12,18 @@ const DescriptionPet = (({ navigation, route }) => {
   const token = useSelector(state => state.auth.token);
 
   const [pet, setPet] = useState({});
+  const [distance, setDistance] = useState();
   const [items, setItems] = useState([]);
   const [owner, setOwner] = useState({});
 
   async function Details() {
-    const { id } = route.params;
+    const { id, dist: distance } = route.params;
     const response = await api.get(`/pets/${id}`);
 
     setOwner(response.data.user);
     setPet(response.data);
     setItems(response.data.items);
+    setDistance(distance);
   }
 
   useEffect(() => {
@@ -56,7 +58,7 @@ const DescriptionPet = (({ navigation, route }) => {
                 )
                 }
               </View>
-              <Text style={styles.subtitle}>Distancia</Text>
+              <Text style={styles.subtitle}>{distance}</Text>
             </View>
 
             <View style={styles.descriptionContainer}>
@@ -106,7 +108,7 @@ const DescriptionPet = (({ navigation, route }) => {
               <View style={styles.userImage}>
                 <UserImg source={{ uri: owner.image }} />
               </View>
-              <View style={{paddingLeft: 10}}>
+              <View style={{ paddingLeft: 10 }}>
                 <Text style={styles.nameOwner}>{owner.name}</Text>
                 <Text style={styles.infOwner}>{owner.city}</Text>
                 <Text style={styles.infOwner}>{owner.phone}</Text>
