@@ -1,8 +1,8 @@
 /* eslint-disable import/no-named-as-default-member */
 import { Router } from 'express';
 import multer from 'multer';
-import multerConfig from './config/multer';
 
+import multerConfig from './config/multer';
 import authMiddleware from './app/middlewares/auth';
 
 import SessionController from './app/controllers/SessionController';
@@ -11,6 +11,7 @@ import PetsController from './app/controllers/PetsController';
 import FavoritesController from './app/controllers/FavoritesController';
 import NotificationController from './app/controllers/NotificationController';
 import LostPetsController from './app/controllers/LostPetsController';
+import FileController from './app/controllers/FileController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -42,6 +43,6 @@ routes.get('/notifications', NotificationController.index);
 routes.put('/notifications/:id', NotificationController.update);
 routes.delete('/notifications/remove/:id', NotificationController.remove);
 
-routes.post('/files', upload.single('file'), (req, res) => res.json({ ok: true }));
+routes.post('/files', upload.single('file'), FileController.store);
 
 export default routes;
