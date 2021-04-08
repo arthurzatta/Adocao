@@ -39,7 +39,7 @@ const Profile = ({ navigation }) => {
         <Box style={styles.box} onPress={() => navigation.navigate('RegisteredPets')}>
           <Icon name='cat' size={40} color={'#4B4B4B'} />
           <View>
-            <Text style={styles.textBox}>Minhas adoções</Text>
+            <Text style={styles.textBox}>Meus pets cadastrados</Text>
           </View>
         </Box>
         <Box style={styles.box} onPress={() => navigation.navigate('Favorites')}>
