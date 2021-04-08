@@ -1,16 +1,17 @@
+import axios from "axios";
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
-import { launchImageLibrary } from 'react-native-image-picker';
-import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import RNPickerSelect from 'react-native-picker-select';
 import IconImage from 'react-native-vector-icons/EvilIcons';
+import { launchImageLibrary } from 'react-native-image-picker';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { Header, Form, FormInput, SubmitButton, TLabel, Title } from './styles';
+import api from '../../services/api';
 import Background from '../../Components/Background';
-
 import { updateProfileRequest } from '../../store/modules/user/actions';
+import { Header, Form, FormInput, SubmitButton, TLabel, Title } from './styles';
+
 
 const MyAccount = ({ navigation }) => {
   const ufPlaceholder = {
@@ -26,18 +27,18 @@ const MyAccount = ({ navigation }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.user);
 
-
   const [ufs, setUfs] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedUf, setSelectedUf] = useState(user.state);
   const [selectedCity, setSelectedCity] = useState(user.city);
 
   const [name, setName] = useState(user.name);
-  const [photo, setPhoto] = useState({})
+  const [password, setPassword] = useState('');
   const [email, setEmail] = useState(user.email);
   const [phone, setPhone] = useState(user.phone);
   const [address, setAdress] = useState(user.address);
-  const [password, setPassword] = useState('');
+
+  const [photo, setPhoto] = useState({});
 
   useEffect(() => {
     axios.get("https://servicodados.ibge.gov.br/api/v1/localidades/estados").then((res) => {
@@ -72,17 +73,20 @@ const MyAccount = ({ navigation }) => {
 
 
   function handleSubmit() {
+    const image = processUpload(photo)
+
     const data = {
       name,
       email,
       password,
-      image: photo.uri,
+      image,
       phone,
       address,
       state: selectedUf,
       city: selectedCity,
     }
-    dispatch(updateProfileRequest(data))
+
+    // dispatch(updateProfileRequest(data))
   }
 
   function handlePhoto() {
@@ -90,10 +94,31 @@ const MyAccount = ({ navigation }) => {
       mediaType: 'photo',
       saveToPhotos: true,
     }, imagePickerCallback);
+
   }
 
   function imagePickerCallback(data) {
     setPhoto(data);
+  }
+
+  function processUpload(file) {
+    const upload = {
+      file,
+      uri: file.uri,
+      name: file.fileName,
+      type: file.type
+    }
+
+    const formData = new FormData();
+
+    formData.append('file', upload);
+
+    const response = api.post('/files', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return 1;
   }
 
   return (

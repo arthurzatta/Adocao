@@ -9,7 +9,7 @@ class UserController {
       name: Yup.string().required(),
       email: Yup.string().email().required(),
       password: Yup.string().required(),
-      state: Yup.string().required().min(2),
+      state: Yup.string().required().max(2),
       city: Yup.string().required(),
       phone: Yup.number().max(11),
     });
