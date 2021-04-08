@@ -16,6 +16,9 @@ export default function auth(state = INITIAL_STATE, action) {
         draft.signed = true;
         break;
       }
+      case '@auth/SIGN_UP_SUCCESS': {
+        break;
+      }
       case '@auth/SIGN_FAILURE': {
         break;
       }

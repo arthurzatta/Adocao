@@ -2,6 +2,12 @@ import styled from 'styled-components/native';
 import Button from '../../Components/Button';
 import Input from '../../Components/Input';
 
+export const Container = styled.View`
+  background-color: rgba(246, 246, 246, 1);
+  flex: 1;
+  padding: 0px 10px;
+`;
+
 export const SubmitButton = styled(Button)`
   margin: 30px;
   align-self: center;

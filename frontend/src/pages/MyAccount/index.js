@@ -72,8 +72,8 @@ const MyAccount = ({ navigation }) => {
   }, [selectedUf]);
 
 
-  function handleSubmit() {
-    const image = processUpload(photo)
+  async function handleSubmit() {
+    const image = await processUpload(photo);
 
     const data = {
       name,
@@ -86,7 +86,7 @@ const MyAccount = ({ navigation }) => {
       city: selectedCity,
     }
 
-    // dispatch(updateProfileRequest(data))
+    dispatch(updateProfileRequest(data))
   }
 
   function handlePhoto() {
@@ -101,7 +101,7 @@ const MyAccount = ({ navigation }) => {
     setPhoto(data);
   }
 
-  function processUpload(file) {
+  async function processUpload(file) {
     const upload = {
       file,
       uri: file.uri,
@@ -113,12 +113,13 @@ const MyAccount = ({ navigation }) => {
 
     formData.append('file', upload);
 
-    const response = api.post('/files', formData, {
+    const response = await api.post('/files', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     });
-    return 1;
+
+    return response.data;
   }
 
   return (

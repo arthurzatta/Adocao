@@ -2,7 +2,7 @@ import { Alert } from 'react-native';
 import { takeLatest, call, put, all } from 'redux-saga/effects';
 
 import api from '../../../services/api';
-import { signFailure, signInSuccess, signOut } from './actions';
+import { signFailure, signInSuccess, signOut, signUpSuccess } from './actions';
 
 export function* signIn({ payload }) {
   try {
@@ -34,12 +34,7 @@ export function* signUp({ payload }) {
       longitude: 4123
     });
 
-    const { user } = response.data;
-
-    if (!user) {
-      Alert.alert('Verifique os dados', 'Erro ao criar sua conta');
-    }
-
+    yield put(signUpSuccess())
   } catch (err) {
     Alert.alert('Falha ao criar conta', 'Houve um erro ao criar usuário')
     yield put(signFailure());
