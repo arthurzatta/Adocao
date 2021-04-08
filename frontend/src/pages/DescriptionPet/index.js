@@ -9,8 +9,6 @@ import IconIsto from 'react-native-vector-icons/Fontisto';
 import api from '../../services/api';
 
 const DescriptionPet = (({ navigation, route }) => {
-  const token = useSelector(state => state.auth.token);
-
   const [pet, setPet] = useState({});
   const [distance, setDistance] = useState();
   const [items, setItems] = useState([]);

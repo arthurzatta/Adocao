@@ -8,7 +8,6 @@ import { TitleNotification, Form, Header, Img } from './styles';
 import api from '../../services/api';
 
 export default function RegisteredPet({navigation}) {
-  const token = useSelector(state => state.auth.token);
   const [pets, setPets] = useState([]);
 
   async function loadingPets() {
