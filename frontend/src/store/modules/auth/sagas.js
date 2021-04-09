@@ -28,11 +28,7 @@ export function* signIn({ payload }) {
 
 export function* signUp({ payload }) {
   try {
-    const response = yield call(api.post, '/register', {
-      ...payload.user,
-      latitude: 1234,
-      longitude: 4123
-    });
+    const response = yield call(api.post, '/register', payload.user);
 
     yield put(signUpSuccess())
   } catch (err) {

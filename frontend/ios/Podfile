@@ -14,6 +14,8 @@ target 'frontend' do
 
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
+  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
+
   target 'frontendTests' do
     inherit! :complete
     # Pods for testing

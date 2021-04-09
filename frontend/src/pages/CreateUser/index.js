@@ -2,9 +2,10 @@ import axios from "axios";
 import { useDispatch } from 'react-redux';
 import { RadioButton } from 'react-native-paper';
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform, PermissionsAndroid } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import IconImage from 'react-native-vector-icons/EvilIcons';
+import Geolocation from '@react-native-community/geolocation';
 import { launchImageLibrary } from 'react-native-image-picker';
 
 import api from '../../services/api';
@@ -26,6 +27,58 @@ const Login = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
+  const [currentLatitude, setCurrentLatitude] = useState('');
+  const [currentLongitude, setCurrentLongitude] = useState('');
+  const [watchID, setWatchID] = useState(0);
+
+  function callLocation() {
+    if (Platform.OS === 'ios') {
+      getLocation();
+    } else {
+      const requestLocationPermission = async () => {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FILE_LOCATION,
+          {
+            title: 'Permissão de acesso à localização',
+            message: 'Nós precisamos da sua localização',
+            buttonNeutral: 'Pergunte-me depois',
+            buttonNegative: 'Cancelar',
+            buttonPositive: 'OK',
+          }
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          getLocation();
+        } else {
+          alert('Permissão de localização negada')
+        }
+      };
+      requestLocationPermission();
+    }
+  }
+
+  function getLocation() {
+    Geolocation.getCurrentPosition((position) => {
+      const currentLatitude = JSON.stringify(position.coords.latitude);
+      const currentLongitude = JSON.stringify(position.coords.longitude);
+      setCurrentLatitude(currentLatitude);
+      setCurrentLongitude(currentLongitude);
+    },
+      (error) => alert(error.message),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+    const watchID = Geolocation.getCurrentPosition((position) => {
+      const currentLatitude = JSON.stringify(position.coords.latitude);
+      const currentLongitude = JSON.stringify(position.coords.longitude);
+      setCurrentLatitude(currentLatitude);
+      setCurrentLongitude(currentLongitude);
+    });
+    setWatchID(watchID)
+  }
+
+  useEffect(() => {
+    getLocation();
+  }, [])
+
   const [ufs, setUfs] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedUf, setSelectedUf] = useState("0");
@@ -33,6 +86,7 @@ const Login = ({ navigation }) => {
 
   const [name, setName] = useState('');
   const [is_ong, setIs_Ong] = useState('false');
+  const [uri, setUri] = useState('https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png');
   const [email, setEmail] = useState('');
   const [photo, setPhoto] = useState({});
   const [phone, setPhone] = useState('');
@@ -72,25 +126,26 @@ const Login = ({ navigation }) => {
 
   async function handleSubmit() {
 
-    let uri;
-    if (photo) {
-      uri = await processUpload(photo);
-    } else {
-      uri = 'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png'
+    if (uri !== 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png') {
+      const Uri = await processUpload(photo);
+      setUri(Uri);
     }
-
 
     const data = {
       name,
       email,
       password,
       phone,
-      image: uri,
       address,
+      image: uri,
+      latitude: currentLatitude,
+      longitude: currentLongitude,
       state: selectedUf,
       city: selectedCity,
       is_ong,
     }
+
+    console.log(data)
 
     dispatch(signUpRequest(data));
 
