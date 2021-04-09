@@ -1,24 +1,30 @@
-import React, { useState } from 'react';
 import { Alert } from 'react-native';
-import { View, Text, StyleSheet } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
+import React, { useState } from 'react';
 import { RadioButton } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { View, Text, StyleSheet } from 'react-native';
 import IconIO from 'react-native-vector-icons/Ionicons';
+import RNPickerSelect from 'react-native-picker-select';
 import IconIsto from 'react-native-vector-icons/Fontisto';
-import { SubmitButton, FormInput, TLabel, Header, Form, IconBox, IconContainer } from './styles';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import IconImage from 'react-native-vector-icons/EvilIcons';
+import { launchImageLibrary } from 'react-native-image-picker';
+
 import api from '../../services/api';
+import { SubmitButton, FormInput, TLabel, Header, Form, IconBox, IconContainer, Container } from './styles';
 
 const CreatePet = ({ navigation }) => {
   const [name, setName] = useState();
   const [sex, setSex] = useState(true);
   const [type, setType] = useState('');
   const [description, setDescription] = useState();
+  const [photo, setPhoto] = useState({});
+
   //Estados dos icones
   const [vacinado, setVacinado] = useState();
   const [castrado, setCastrado] = useState();
   const [vermifugado, setVermifugado] = useState();
   const [chipado, setChipado] = useState();
+
 
   async function submitButton() {
     try {
@@ -26,15 +32,17 @@ const CreatePet = ({ navigation }) => {
         return;
       }
 
+      const image = await processUpload(photo);
+
       const items = [vacinado, castrado, vermifugado, chipado];
+
       const data = {
         name,
         description,
         sex: sex ? 'M' : 'F',
         type,
         items,
-        is_lost: false,
-
+        image,
       }
 
       const response = await api.post('/pets/create', data);
@@ -46,8 +54,41 @@ const CreatePet = ({ navigation }) => {
     }
   }
 
+  function handlePhoto() {
+    launchImageLibrary({
+      mediaType: 'photo',
+      saveToPhotos: true,
+    }, imagePickerCallback);
+
+  }
+
+  function imagePickerCallback(data) {
+    setPhoto(data);
+  }
+
+  async function processUpload(file) {
+    const upload = {
+      file,
+      uri: file.uri,
+      name: file.fileName,
+      type: file.type
+    }
+
+    const formData = new FormData();
+
+    formData.append('file', upload);
+
+    const response = await api.post('/files', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    return response.data;
+  }
+
   return (
-    <View style={styles.container}>
+    <Container >
       <Form style={styles.form}>
         <Header>
           <View style={styles.closeCreate}>
@@ -68,6 +109,15 @@ const CreatePet = ({ navigation }) => {
           value={name}
           onChangeText={setName}
         />
+
+        <TLabel>Carregar uma foto: </TLabel>
+        <View>
+          <FormInput
+            placeholder=""
+            value={photo.fileName}
+          />
+          <IconImage name="image" size={57} color={'#FF93B5'} style={styles.iconImage} onPress={() => handlePhoto()} />
+        </View>
 
         <TLabel>Descrição:</TLabel>
         <FormInput
@@ -159,7 +209,7 @@ const CreatePet = ({ navigation }) => {
           <Text style={styles.buttonText}>Criar pet</Text>
         </SubmitButton>
       </Form>
-    </View>
+    </Container>
   )
 };
 
@@ -183,6 +233,12 @@ const styles = StyleSheet.create({
     fontSize: 30,
     marginRight: 5,
     color: '#FF93B5',
+  },
+  iconImage: {
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    paddingRight: 5,
+    backgroundColor: 'rgba(246, 246, 246, 1)',
   },
   closeCreate: {
     flexDirection: 'row',

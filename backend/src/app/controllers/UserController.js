@@ -5,18 +5,18 @@ import User from '../models/User';
 // Criar um usuario, editar os dados, deletar os dados, listar os dados
 class UserController {
   async create(request, response) {
-    const schema = Yup.object().shape({
-      name: Yup.string().required(),
-      email: Yup.string().email().required(),
-      password: Yup.string().required(),
-      state: Yup.string().required().min(2),
-      city: Yup.string().required(),
-      phone: Yup.number().max(11),
-    });
+    // const schema = Yup.object().shape({
+    //   name: Yup.string().required(),
+    //   email: Yup.string().email().required(),
+    //   password: Yup.string().required(),
+    //   state: Yup.string().required().max(2),
+    //   city: Yup.string().required(),
+    //   phone: Yup.number().max(11),
+    // });
 
-    if (!(await schema.isValid(request.body))) {
-      return response.status(400).json({ error: 'Validations fails' });
-    }
+    // if (!(await schema.isValid(request.body))) {
+    //   return response.status(400).json({ error: 'Validations fails' });
+    // }
 
     const userExist = await User.findOne({ where: { email: request.body.email } });
 

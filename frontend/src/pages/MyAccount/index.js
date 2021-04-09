@@ -1,14 +1,17 @@
+import axios from "axios";
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
-import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
+import RNPickerSelect from 'react-native-picker-select';
+import IconImage from 'react-native-vector-icons/EvilIcons';
+import { launchImageLibrary } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { Header, Form, FormInput, SubmitButton, TLabel, Title } from './styles';
+import api from '../../services/api';
 import Background from '../../Components/Background';
-
 import { updateProfileRequest } from '../../store/modules/user/actions';
+import { Header, Form, FormInput, SubmitButton, TLabel, Title } from './styles';
+
 
 const MyAccount = ({ navigation }) => {
   const ufPlaceholder = {
@@ -22,8 +25,7 @@ const MyAccount = ({ navigation }) => {
   }
 
   const dispatch = useDispatch();
-  const user  = useSelector(state => state.user.user);
-
+  const user = useSelector(state => state.user.user);
 
   const [ufs, setUfs] = useState([]);
   const [cities, setCities] = useState([]);
@@ -31,10 +33,12 @@ const MyAccount = ({ navigation }) => {
   const [selectedCity, setSelectedCity] = useState(user.city);
 
   const [name, setName] = useState(user.name);
+  const [password, setPassword] = useState('');
   const [email, setEmail] = useState(user.email);
   const [phone, setPhone] = useState(user.phone);
   const [address, setAdress] = useState(user.address);
-  const [password, setPassword] = useState('');
+
+  const [photo, setPhoto] = useState({});
 
   useEffect(() => {
     axios.get("https://servicodados.ibge.gov.br/api/v1/localidades/estados").then((res) => {
@@ -68,17 +72,54 @@ const MyAccount = ({ navigation }) => {
   }, [selectedUf]);
 
 
-  function handleSubmit() {
+  async function handleSubmit() {
+    const image = await processUpload(photo);
+
     const data = {
       name,
       email,
       password,
+      image,
       phone,
       address,
       state: selectedUf,
       city: selectedCity,
     }
+
     dispatch(updateProfileRequest(data))
+  }
+
+  function handlePhoto() {
+    launchImageLibrary({
+      mediaType: 'photo',
+      saveToPhotos: true,
+    }, imagePickerCallback);
+
+  }
+
+  function imagePickerCallback(data) {
+    setPhoto(data);
+  }
+
+  async function processUpload(file) {
+    const upload = {
+      file,
+      uri: file.uri,
+      name: file.fileName,
+      type: file.type
+    }
+
+    const formData = new FormData();
+
+    formData.append('file', upload);
+
+    const response = await api.post('/files', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    return response.data;
   }
 
   return (
@@ -107,6 +148,15 @@ const MyAccount = ({ navigation }) => {
           value={email}
           onChangeText={setEmail}
         />
+
+        <TLabel>Carregar uma foto: </TLabel>
+        <View>
+          <FormInput
+            placeholder=""
+            value={photo.fileName}
+          />
+          <IconImage name="image" size={57} color={'#FF93B5'} style={styles.iconImage} onPress={() => handlePhoto()} />
+        </View>
 
         <TLabel>Número de celular: </TLabel>
         <FormInput
@@ -205,6 +255,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.58,
     shadowRadius: 16.00,
     elevation: 24,
+  },
+  iconImage: {
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    paddingRight: 5,
+    backgroundColor: 'rgba(246, 246, 246, 1)',
   },
   buttonText: {
     paddingTop: 11,

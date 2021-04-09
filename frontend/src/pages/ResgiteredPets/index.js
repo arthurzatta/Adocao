@@ -1,79 +1,99 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { Text, FlatList, View, StyleSheet, Image } from 'react-native';
-import Background from '../../Components/Background/index';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { TitleNotification, Form, Header, Img } from './styles';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Text, FlatList, View, StyleSheet, Image } from 'react-native';
+import { parseISO, format } from 'date-fns';
+import pt from 'date-fns/locale/pt';
+
+import Background from '../../Components/Background/index';
+import { TitleNotification, Form, Header, Img, Description } from './styles';
+
 import api from '../../services/api';
 
-export default function RegisteredPet({navigation}) {
-  const token = useSelector(state => state.auth.token);
+export default function RegisteredPet({ navigation }) {
   const [pets, setPets] = useState([]);
 
   async function loadingPets() {
-    const response = await api.get('/pets/list');
+    const response = await api.get('/pets', {
+      headers: {
+        owner: true,
+      }
+    });
+
+    response.data.map((item) => {
+      const { createdAt } = item;
+
+      const date = format(
+        parseISO(createdAt),
+        "'Criado em' dd 'de' MMMM'",
+        { locale: pt }
+      );
+
+      item.createdAt = date;
+    })
+
     setPets(response.data);
   }
 
   useEffect(() => {
     loadingPets();
-  }, [])
+  }, []);
 
-	return (
+  return (
     <Background>
-        <Header>
-          <Icon name="arrow-left-thick" size={22} color={'#fff'} onPress={() => navigation.pop()} />
-					<Text style={styles.title}>Meus pets cadastrados</Text>
-        </Header>
+      <Header>
+        <Icon name="arrow-left-thick" size={22} color={'#fff'} onPress={() => navigation.pop()} />
+        <Text style={styles.title}>Meus pets cadastrados</Text>
+      </Header>
 
-        <Form style={styles.form}>
+      <Form style={styles.form}>
 
-          {pets.length !== 0
+        {pets.length !== 0
           ? (
             <FlatList
               data={pets}
+              keyExtractor={pet => String(pet.id)}
+              showsVerticalScrollIndicator={false}
               style={styles.notificationList}
               renderItem={({ item: pet }) => (
                 <>
-                <TouchableOpacity style={styles.boxNotification} onPress={() => navigation.navigate('DescriptionPet', {id: pet.id})}>
-                  <View style={{ flexDirection: 'row'}}>
-                    <View style={styles.viewImg}>
-                      <Img source={{uri: pet.image}}/>
-                    </View>
-                    <View>
-                      <View style={{flexDirection: 'row'}}>
-                        <TitleNotification>{pet.name}</TitleNotification>
-                        {pet.sex == 'm' ? (
-                            <Icon name='gender-male' size={30} color={'#78CEFF'} style={{marginLeft: 5, marginTop: 9}}/>
+                  <TouchableOpacity style={styles.boxNotification} onPress={() => navigation.navigate('DescriptionPet', { id: pet.id })}>
+                    <View style={{ flexDirection: 'row' }}>
+                      <View style={styles.viewImg}>
+                        <Img source={{ uri: pet.image }} />
+                      </View>
+                      <View>
+                        <View style={{ flexDirection: 'row' }}>
+                          <TitleNotification>{pet.name}</TitleNotification>
+                          {pet.sex == 'M' ? (
+                            <Icon name='gender-male' size={20} color={'#78CEFF'} style={{ marginLeft: 5, marginTop: 9 }} />
                           ) : (
-                            <Icon name='gender-female' size={30} color={'#FF93B5'} style={{marginLeft: 5, marginTop: 9}}/>
-                            )}
+                            <Icon name='gender-female' size={20} color={'#FF93B5'} style={{ marginLeft: 5, marginTop: 9 }} />
+                          )}
+                        </View>
+                        <Description>{pet.createdAt}</Description>
                       </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
+                  </TouchableOpacity>
                 </>
               )}
             />) : (
-            <View style={{flex: 1, flexDirection:  'column', marginTop: 250}}>
-              <Image source={require('../../assets/cat.png')} style={{alignSelf: 'center'}}/>
+            <View style={{ flex: 1, flexDirection: 'column', marginTop: 250 }}>
+              <Image source={require('../../assets/cat.png')} style={{ alignSelf: 'center' }} />
               <Text style={styles.noFavsText}>Você não possui pets cadastrados</Text>
             </View>
           )}
-
-        </Form>
+      </Form>
     </Background>
   )
-
 }
-
 
 const styles = StyleSheet.create({
   title: {
     fontFamily: 'Ubuntu-Medium',
     color: '#fff',
     fontSize: 18,
+    paddingLeft: 10,
   },
   notificationsText: {
     fontFamily: 'Ubuntu-Bold',

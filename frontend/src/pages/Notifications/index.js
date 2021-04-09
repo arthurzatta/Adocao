@@ -10,7 +10,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Notifications = ({navigation}) => {
   const [notifications, setNotifications] = useState([]);
-  const token = useSelector(state => state.auth.token);
 
   async function loadingNotifications() {
     const response = await api.get('notifications');

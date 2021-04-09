@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
-import { RadioButton } from 'react-native-paper';
 import axios from "axios";
 import { useDispatch } from 'react-redux';
+import { RadioButton } from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Platform, PermissionsAndroid } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
+import IconImage from 'react-native-vector-icons/EvilIcons';
+import Geolocation from '@react-native-community/geolocation';
+import { launchImageLibrary } from 'react-native-image-picker';
 
-import { Header, Form, FormInput, SubmitButton, TLabel } from './styles';
+import api from '../../services/api';
 import Background from '../../Components/Background';
+import { Header, Form, FormInput, SubmitButton, TLabel } from './styles';
 
 import { signUpRequest } from '../../store/modules/auth/actions'
 
@@ -23,6 +27,58 @@ const Login = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
+  const [currentLatitude, setCurrentLatitude] = useState('');
+  const [currentLongitude, setCurrentLongitude] = useState('');
+  const [watchID, setWatchID] = useState(0);
+
+  function callLocation() {
+    if (Platform.OS === 'ios') {
+      getLocation();
+    } else {
+      const requestLocationPermission = async () => {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FILE_LOCATION,
+          {
+            title: 'Permissão de acesso à localização',
+            message: 'Nós precisamos da sua localização',
+            buttonNeutral: 'Pergunte-me depois',
+            buttonNegative: 'Cancelar',
+            buttonPositive: 'OK',
+          }
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          getLocation();
+        } else {
+          alert('Permissão de localização negada')
+        }
+      };
+      requestLocationPermission();
+    }
+  }
+
+  function getLocation() {
+    Geolocation.getCurrentPosition((position) => {
+      const currentLatitude = JSON.stringify(position.coords.latitude);
+      const currentLongitude = JSON.stringify(position.coords.longitude);
+      setCurrentLatitude(currentLatitude);
+      setCurrentLongitude(currentLongitude);
+    },
+      (error) => alert(error.message),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+    const watchID = Geolocation.getCurrentPosition((position) => {
+      const currentLatitude = JSON.stringify(position.coords.latitude);
+      const currentLongitude = JSON.stringify(position.coords.longitude);
+      setCurrentLatitude(currentLatitude);
+      setCurrentLongitude(currentLongitude);
+    });
+    setWatchID(watchID)
+  }
+
+  useEffect(() => {
+    getLocation();
+  }, [])
+
   const [ufs, setUfs] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedUf, setSelectedUf] = useState("0");
@@ -30,8 +86,9 @@ const Login = ({ navigation }) => {
 
   const [name, setName] = useState('');
   const [is_ong, setIs_Ong] = useState('false');
+  const [uri, setUri] = useState('https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png');
   const [email, setEmail] = useState('');
-  const [image, setImage] = useState('');
+  const [photo, setPhoto] = useState({});
   const [phone, setPhone] = useState('');
   const [address, setAdress] = useState('');
   const [password, setPassword] = useState('');
@@ -67,23 +124,65 @@ const Login = ({ navigation }) => {
     });
   }, [selectedUf]);
 
-  function handleSubmit() {
-    if(image === '') {
-      setImage('https://techcommunity.microsoft.com/t5/image/serverpage/image-id/217078i525F6A9EF292601F/image-size/large?v=1.0&px=999')
+  async function handleSubmit() {
+
+    if (uri !== 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png') {
+      const Uri = await processUpload(photo);
+      setUri(Uri);
     }
+
     const data = {
       name,
       email,
       password,
       phone,
-      image,
       address,
+      image: uri,
+      latitude: currentLatitude,
+      longitude: currentLongitude,
       state: selectedUf,
       city: selectedCity,
       is_ong,
     }
 
+    console.log(data)
+
     dispatch(signUpRequest(data));
+
+    navigation.navigate('Login');
+  }
+
+  function handlePhoto() {
+    launchImageLibrary({
+      mediaType: 'photo',
+      saveToPhotos: true,
+    }, imagePickerCallback);
+
+  }
+
+  function imagePickerCallback(data) {
+    setPhoto(data);
+  }
+
+  async function processUpload(file) {
+    const upload = {
+      file,
+      uri: file.uri,
+      name: file.fileName,
+      type: file.type
+    }
+
+    const formData = new FormData();
+
+    formData.append('file', upload);
+
+    const response = await api.post('/files', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    return response.data;
   }
 
   return (
@@ -112,6 +211,15 @@ const Login = ({ navigation }) => {
           value={email}
           onChangeText={setEmail}
         />
+
+        <TLabel>Carregar uma foto: </TLabel>
+        <View>
+          <FormInput
+            placeholder=""
+            value={photo.fileName}
+          />
+          <IconImage name="image" size={57} color={'#FF93B5'} style={styles.iconImage} onPress={() => handlePhoto()} />
+        </View>
 
         <TLabel>Número de celular: </TLabel>
         <FormInput
@@ -213,6 +321,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
     marginLeft: 10,
+  },
+  iconImage: {
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    paddingRight: 5,
+    backgroundColor: 'rgba(246, 246, 246, 1)',
   },
   innerTerm: {
     color: '#FF93B5',
