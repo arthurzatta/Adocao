@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Background from '../../Components/Background/index';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Linking } from 'react-native';
 import { Container, IconButton, IconContainer, TLabel, Img, width, UserImg } from './styles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconIO from 'react-native-vector-icons/Ionicons';
@@ -13,15 +13,38 @@ const DescriptionPet = (({ navigation, route }) => {
   const [distance, setDistance] = useState();
   const [items, setItems] = useState([]);
   const [owner, setOwner] = useState({});
+  const [liked, setLiked] = useState(false);
+  const [id, setId] = useState();
 
   async function Details() {
     const { id, dist: distance } = route.params;
     const response = await api.get(`/pets/${id}`);
 
+    setId(id);
+
     setOwner(response.data.user);
     setPet(response.data);
     setItems(response.data.items);
     setDistance(distance);
+  }
+
+  function sendWhatsapp() {
+    Linking.openURL(`whatsapp://send?phone=55${owner.phone}&text=Olá ${owner.name}, estou entrando em contato pelo app Adocão pois vi o seu pet para adoção e tenho interesse`)
+  }
+
+  async function addOrRemoveFavorites() {
+    if (liked === true) {
+      setLiked(false);
+    } else {
+      setLiked(true);
+    }
+
+
+    if (liked === true) {
+      await api.delete(`/favorites/remove/${id}`);
+    } else {
+      await api.post(`/favorites/create/${id}`);
+    }
   }
 
   useEffect(() => {
@@ -41,8 +64,16 @@ const DescriptionPet = (({ navigation, route }) => {
             <Img source={{ uri: pet.image }} />
           </View>
           <IconContainer>
-            <IconButton icon='message' color='rgba(95,169,61,1)' />
-            <IconButton icon='heart-outline' color='rgba(215,68,62,1)' />
+            <IconButton
+              onPress={() => sendWhatsapp()}
+              icon='message'
+              color='rgba(95,169,61,1)'
+            />
+            <IconButton
+              onPress={() => addOrRemoveFavorites()}
+              icon={liked === true ? 'heart' : 'heart-outline'}
+              color='rgba(215,68,62,1)'
+            />
           </IconContainer>
 
           <View style={{ margin: 20 }}>
@@ -108,11 +139,10 @@ const DescriptionPet = (({ navigation, route }) => {
               </View>
               <View style={{ paddingLeft: 10 }}>
                 <Text style={styles.nameOwner}>{owner.name}</Text>
-                <Text style={styles.infOwner}>{owner.city}</Text>
+                <Text style={styles.infOwner}>{owner.city} {owner.state}</Text>
                 <Text style={styles.infOwner}>{owner.phone}</Text>
               </View>
             </View>
-
           </View>
         </Container>
       </ScrollView>

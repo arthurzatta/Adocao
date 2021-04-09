@@ -28,9 +28,11 @@ export default function LostPet({ navigation, route }) {
 
   };
 
+  function sendWhatsapp() {
+    Linking.openURL(`whatsapp://send?phone=55${owner.phone}&text=Olá ${owner.name}, estou entrando em contato pelo app Adocão pois quero te ajudar a achar seu pet!`)
+  }
 
   useEffect(() => { Details() }, []);
-
 
   return (
     <>
@@ -47,7 +49,7 @@ export default function LostPet({ navigation, route }) {
 
           {/* FAB */}
           <IconContainer>
-            <IconButton icon='message' color='rgba(95,169,61,1)' />
+            <IconButton onPress={() => sendWhatsapp()} icon='message' color='rgba(95,169,61,1)' />
           </IconContainer>
 
           <View style={{ margin: 20 }}>
@@ -63,8 +65,7 @@ export default function LostPet({ navigation, route }) {
                 }
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={styles.subtitle}></Text>
-                <Text style={styles.subtitle}>{pet.createdAt}</Text>
+                <Text style={styles.subtitle}>Criado em 09 de março de 2021</Text>
               </View>
             </View>
 
@@ -108,7 +109,7 @@ export default function LostPet({ navigation, route }) {
               </View>
               <View>
                 <Text style={styles.nameOwner}>{owner.name}</Text>
-                <Text style={styles.infOwner}>{owner.city}</Text>
+                <Text style={styles.infOwner}>{owner.city} {owner.state}</Text>
                 <Text style={styles.infOwner}>{owner.phone}</Text>
               </View>
             </View>

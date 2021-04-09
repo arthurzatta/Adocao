@@ -6,12 +6,15 @@ import { RadioButton } from 'react-native-paper';
 import { SubmitButton, FormInput, TLabel, Header, Form } from './styles';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import IconImage from 'react-native-vector-icons/EvilIcons';
+import { launchImageLibrary } from 'react-native-image-picker';
 import api from '../../services/api';
 
-export default function CreatePet({navigation}) {
+export default function CreatePet({ navigation }) {
   const [name, setName] = useState();
   const [description, setDescription] = useState();
   const [sex, setSex] = useState(true);
+  const [photo, setPhoto] = useState({});
 
   const user = useSelector(state => state.user.user);
 
@@ -28,11 +31,14 @@ export default function CreatePet({navigation}) {
         return;
       }
 
+      const uri = await processUpload(photo);
+
       const data = {
         name,
         description,
         sex: sex ? 'M' : 'F',
         latitude,
+        image: uri,
         longitude,
         id_user: user.id
       }
@@ -47,9 +53,40 @@ export default function CreatePet({navigation}) {
     }
   }
 
+  function handlePhoto() {
+    launchImageLibrary({
+      mediaType: 'photo',
+      saveToPhotos: true,
+    }, imagePickerCallback);
 
+  }
 
-  return(
+  function imagePickerCallback(data) {
+    setPhoto(data);
+  }
+
+  async function processUpload(file) {
+    const upload = {
+      file,
+      uri: file.uri,
+      name: file.fileName,
+      type: file.type
+    }
+
+    const formData = new FormData();
+
+    formData.append('file', upload);
+
+    const response = await api.post('/files', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    return response.data;
+  }
+
+  return (
     <View style={styles.container}>
       <Form style={styles.form}>
         <Header>
@@ -77,7 +114,14 @@ export default function CreatePet({navigation}) {
           onChangeText={setDescription}
         />
 
-        <TLabel>Carregue uma foto:</TLabel>
+        <TLabel>Carregar uma foto: </TLabel>
+        <View>
+          <FormInput
+            placeholder=""
+            value={photo.fileName}
+          />
+          <IconImage name="image" size={57} color={'#FF93B5'} style={styles.iconImage} onPress={() => handlePhoto()} />
+        </View>
 
 
         <View style={styles.radioContainer}>
@@ -119,7 +163,7 @@ export default function CreatePet({navigation}) {
               showsCompass={false}
               onPress={e => setCoordinates(e.nativeEvent.coordinate)}
             >
-              <Marker coordinate={coordinates}/>
+              <Marker coordinate={coordinates} />
             </MapView>
           </View>
         </View>
@@ -136,6 +180,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
     flexDirection: 'column',
+  },
+  iconImage: {
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    paddingRight: 5,
   },
   title: {
     fontFamily: 'Roboto-Medium',
