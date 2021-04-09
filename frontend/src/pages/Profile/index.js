@@ -48,12 +48,6 @@ const Profile = ({ navigation }) => {
             <Text style={styles.textBox}>Pets favoritos</Text>
           </View>
         </Box>
-        <Box style={styles.box}>
-          <Icon name='alert-circle' size={40} color={'#4B4B4B'} />
-          <View>
-            <Text style={styles.textBox}>Alertar pet perdido</Text>
-          </View>
-        </Box>
 
         <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 10 }}>
           <SmallBox style={styles.smallBox}>

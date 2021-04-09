@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Alert } from 'react-native';
 import { View, Text, StyleSheet } from 'react-native';
 import { RadioButton } from 'react-native-paper';
@@ -12,14 +13,18 @@ export default function CreatePet({navigation}) {
   const [description, setDescription] = useState();
   const [sex, setSex] = useState(true);
 
+  const user = useSelector(state => state.user.user);
+
   const [coordinates, setCoordinates] = useState({
-    latitude: -19.468886, 
-    longitude: -42.540584
+    latitude: Number(user.latitude), 
+    longitude: Number(user.longitude)
   });
 
+  
   async function submitButton() {
     try {
-      if (!name || !type) {
+      const { latitude, longitude } = coordinates;
+      if (!name) {
         return;
       }
 
@@ -27,7 +32,9 @@ export default function CreatePet({navigation}) {
         name,
         description,
         sex: sex ? 'M' : 'F',
-        coordinates
+        latitude,
+        longitude,
+        id_user: user.id
       }
 
       const response = await api.post('/lost/create', data);
@@ -35,9 +42,12 @@ export default function CreatePet({navigation}) {
       navigation.navigate('LostPet', { id });
 
     } catch (err) {
+      console.log(err);
       Alert.alert('Falha na doação', 'Não foi possivel doar o pet, insira todos os dados corretamente');
     }
   }
+
+  
 
   return(
     <View style={styles.container}>
@@ -63,7 +73,7 @@ export default function CreatePet({navigation}) {
           autoCapitalize="none"
           autoCorrect={false}
           placeholder=""
-          value={name}
+          value={description}
           onChangeText={setDescription}
         />
 
@@ -97,9 +107,9 @@ export default function CreatePet({navigation}) {
               provider={PROVIDER_GOOGLE}
               style={mapStyle.map}
               region={{
-                latitude: coordinates.lat,
-                longitude: coordinates.long,
-                latitudeDelta: 5,
+                latitude: coordinates.latitude,
+                longitude: coordinates.longitude,
+                latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
               }}
               rotateEnabled={false}

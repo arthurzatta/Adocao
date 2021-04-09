@@ -6,22 +6,28 @@ import  IconIO  from 'react-native-vector-icons/Ionicons';
 import { Container, IconContainer, IconButton, Img, UserImg, width } from './styles';
 import api from '../../services/api';
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
+import { parse, format, getHours } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 
 export default function LostPet({navigation, route}) {
   const [pet, setPet] = useState({});
   const [owner, setOwner] = useState({});
-  const [lat, setLat] = useState();
-  const [long, setLong] = useState();
+  const [coordinates, setCoordinates] = useState({});
+
   async function Details() {
-    // const { id } = route.params;
-    const response = await api.get(`/lost/${1}`);
-    console.log(response.data)
+    const { id } = route.params;
+    const response = await api.get(`/lost/${id}`);
+    
+    setCoordinates({
+      latitude: Number(response.data.latitude),
+      longitude: Number(response.data.longitude)
+    });
+
     setPet(response.data);
     setOwner(response.data.user);
 
-    setLat(() => Number(pet.latitude));
-    setLong(() => Number(pet.longitude));
   };
+
 
   useEffect(() => { Details() },[]);
 
@@ -31,7 +37,7 @@ export default function LostPet({navigation, route}) {
       <ScrollView style={{flex: 1}} containerContentStyle={{flexGrow:1}} showsVerticalScrollIndicator={false}>
         <Header>
           <Icon name='arrow-back'
-              onPress={() => navigation.pop()}
+              onPress={() => navigation.navigate("Home")}
               style={{ fontSize: 40, color: '#FFFFFF',paddingBottom: 60, paddingTop: 30}}
           />
         </Header>
@@ -51,7 +57,7 @@ export default function LostPet({navigation, route}) {
             <View>
               <View style={styles.infos}>
                 <Text style={styles.title}>{pet.name}</Text>
-                {pet.sex === 'm' ? (
+                {pet.sex === 'M' ? (
                         < IconIO style={styles.icon} name='male'  color={'#78CEFF'} />
                       ) : (
                           <IconIO style={styles.icon} name='female' color={'#FF93B5'} />
@@ -60,7 +66,7 @@ export default function LostPet({navigation, route}) {
               </View>
               <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Text style={styles.subtitle}></Text>
-                <Text style={styles.subtitle}>19:31</Text>
+                <Text style={styles.subtitle}>{pet.createdAt}</Text>
               </View>
             </View>
 
@@ -72,8 +78,8 @@ export default function LostPet({navigation, route}) {
                     provider={PROVIDER_GOOGLE}
                     style={mapStyle.map}
                     region= {{
-                      latitude: lat,
-                      longitude: long,
+                      latitude: coordinates.latitude,
+                      longitude: coordinates.longitude,
                       latitudeDelta: 0.0922,
                       longitudeDelta: 0.0421,
                     }}
@@ -81,21 +87,20 @@ export default function LostPet({navigation, route}) {
                     zoomEnabled={true}
                     scrollEnabled={true}
                     showsTraffic={false}
-                    showsBuildings={false}
+                    minZoomLevel={18}
                   >
                     <Circle
-                      center={{ latitude: lat, longitude: long}}
+                      center={coordinates}
                       radius={10}
                       strokeWidth={3}
                       strokeColor={'#FF93B5'}
                       fillColor={'rgba(255,147,181,0.5)'}
                     />
                     <Marker 
-                      coordinate={{ latitude: lat, longitude: long}}
+                      coordinate={coordinates}
                     />
                   </MapView>
                 </View>
-                <View style={{padding: 100}}></View>
             </View>
 
             {/* User Informations */}
@@ -142,7 +147,8 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: '#A4A4A4'
+    borderColor: '#A4A4A4',
+    height: 350
   },
   mapContainerText: {
     flexDirection: 'row', 
@@ -188,8 +194,6 @@ const styles = StyleSheet.create({
     height: 60,
     marginRight: 10,
     borderRadius: 60,
-    borderStyle: 'solid',
-    borderWidth: 1,
   },
 });
 

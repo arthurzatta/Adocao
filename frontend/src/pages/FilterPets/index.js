@@ -19,8 +19,7 @@ const Filter = ({ navigation }) => {
   const token = useSelector(state => state.auth.token);
 
   const [name, setName] = useState();
-  const [radius, setRadius] = useState(1);
-  const [selectedRadius, setSelectedRadius] = useState();
+  const [selectedRadius, setSelectedRadius] = useState(1);
   const [sex, setSex] = useState();
   const [type, setType] = useState();
 
@@ -102,7 +101,7 @@ const Filter = ({ navigation }) => {
         <View>
           <View style={sliderStyles.sliderLabel}>
             <TLabel>Distância:</TLabel>
-            <TLabel>{Math.round(radius * 100) / 100}km</TLabel>
+            <TLabel>{Math.round(selectedRadius * 100) / 100}km</TLabel>
           </View>
           <Slider
             style={sliderStyles.slider}

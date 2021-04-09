@@ -17,6 +17,14 @@ const Notifications = ({navigation}) => {
     setNotifications(response.data);
   }
 
+  function changePage(notification){
+    if(notification.type === "lost"){
+      navigation.navigate('LostPet', {id: notification.pet_id, subtitle: notification.subtitle})
+    }else{
+      navigation.navigate('DescriptionPet', {id: notification.pet_id})
+    }
+  }
+
   useEffect(() => {
     loadingNotifications()
   }, []);
@@ -35,7 +43,7 @@ const Notifications = ({navigation}) => {
         onEndReachedThershold={0.2}
         renderItem={({ item: notification }) => (
           <>
-            <TouchableOpacity style={styles.boxNotification} onPress={() => navigation.navigate('LostPet', {id: notification.pet_id, subtitle: notification.subtitle})}>
+            <TouchableOpacity style={styles.boxNotification} onPress={() => changePage(notification)}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                 {notification.type == 'create' ? (
                   <Icon name='dog' size={40} color={'#4B4B4B'} />

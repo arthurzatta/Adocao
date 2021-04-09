@@ -42,6 +42,4 @@ export const UserImg = styled.Image`
   width: 100%;
   height: 100%;
   border-radius: 60px;
-  border-style: solid;
-  border-width: 1px;
 `
