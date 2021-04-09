@@ -21,7 +21,7 @@ export default function Home({ navigation }) {
   const { open } = fab;
 
   function navigateToDetail(pet) {
-    navigation.navigate('DescriptionPet', { id: pet.id });
+    navigation.navigate('DescriptionPet', { id: pet.id, distance: distance() });
   }
 
   function distance(pet) {
@@ -123,7 +123,7 @@ export default function Home({ navigation }) {
           {
             icon: 'alert-circle',
             label: 'Criar alerta',
-            onPress: (() => navigation.navigate('LostPet'))
+            onPress: (() => navigation.navigate('CreateAlert'))
           }
         ]}
         onStateChange={onStateChange}

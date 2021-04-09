@@ -4,12 +4,31 @@ import {View, ScrollView, StyleSheet, Text } from 'react-native';
 import  Icon  from 'react-native-vector-icons/MaterialIcons';
 import  IconIO  from 'react-native-vector-icons/Ionicons';
 import { Container, IconContainer, IconButton, Img, UserImg, width } from './styles';
+import api from '../../services/api';
+import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
 
-export default function LostPet({navigation}) {
+export default function LostPet({navigation, route}) {
+  const [pet, setPet] = useState({});
+  const [owner, setOwner] = useState({});
+  const [lat, setLat] = useState();
+  const [long, setLong] = useState();
+  async function Details() {
+    // const { id } = route.params;
+    const response = await api.get(`/lost/${1}`);
+    console.log(response.data)
+    setPet(response.data);
+    setOwner(response.data.user);
 
+    setLat(() => Number(pet.latitude));
+    setLong(() => Number(pet.longitude));
+  };
+
+  useEffect(() => { Details() },[]);
+
+  
   return(
     <>
-      <ScrollView style={{flex: 1}} containerContentStyle={{flexGrow:1}} showsVerticalScrollIndeicator={false}>
+      <ScrollView style={{flex: 1}} containerContentStyle={{flexGrow:1}} showsVerticalScrollIndicator={false}>
         <Header>
           <Icon name='arrow-back'
               onPress={() => navigation.pop()}
@@ -19,7 +38,7 @@ export default function LostPet({navigation}) {
         <Container style={styles.box}>
           {/* Image */}
           <View style={styles.image}>
-            <Img source={{uri: 'https://amazinganimalphotos.com/wp-content/uploads/2013/04/most-innocent-cat-photo.jpg'}} />
+            <Img source={{uri: pet.image}} />
           </View>
 
           {/* FAB */}
@@ -31,23 +50,50 @@ export default function LostPet({navigation}) {
             {/* Pet Infos */}
             <View>
               <View style={styles.infos}>
-                <Text style={styles.title}>Pet Name</Text>
-                {/* {pet.sex === 'm' ? (
+                <Text style={styles.title}>{pet.name}</Text>
+                {pet.sex === 'm' ? (
                         < IconIO style={styles.icon} name='male'  color={'#78CEFF'} />
                       ) : (
                           <IconIO style={styles.icon} name='female' color={'#FF93B5'} />
                         )
-                } */}
+                }
               </View>
-                <Text style={styles.subtitle}>Distancia</Text>
+              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text style={styles.subtitle}></Text>
+                <Text style={styles.subtitle}>19:31</Text>
+              </View>
             </View>
 
             {/* Map */}
             <View style={styles.mapContainer}>
-                {/* Info */}
-                <View style={styles.mapContainerText}>
-                  <Text style={styles.lasTime}>Última vez visto</Text>
-                  <Text style={styles.time}>Reportado às 19:31</Text>
+                
+                <View style={mapStyle.container}>
+                  <MapView
+                    provider={PROVIDER_GOOGLE}
+                    style={mapStyle.map}
+                    region= {{
+                      latitude: lat,
+                      longitude: long,
+                      latitudeDelta: 0.0922,
+                      longitudeDelta: 0.0421,
+                    }}
+                    rotateEnabled={false}
+                    zoomEnabled={true}
+                    scrollEnabled={true}
+                    showsTraffic={false}
+                    showsBuildings={false}
+                  >
+                    <Circle
+                      center={{ latitude: lat, longitude: long}}
+                      radius={10}
+                      strokeWidth={3}
+                      strokeColor={'#FF93B5'}
+                      fillColor={'rgba(255,147,181,0.5)'}
+                    />
+                    <Marker 
+                      coordinate={{ latitude: lat, longitude: long}}
+                    />
+                  </MapView>
                 </View>
                 <View style={{padding: 100}}></View>
             </View>
@@ -55,12 +101,12 @@ export default function LostPet({navigation}) {
             {/* User Informations */}
             <View style={{flexDirection: 'row' ,paddingTop: 10}}>
               <View style={styles.userImage}>
-                {/* <UserImg source={{uri: owner.image}}/> */}
+                <UserImg source={{uri: owner.image}}/>
               </View>
               <View>
-                <Text style={styles.nameOwner}>Dono</Text>
-                <Text style={styles.infOwner}>Cidade</Text>
-                <Text style={styles.infOwner}>Phone</Text>
+                <Text style={styles.nameOwner}>{owner.name}</Text>
+                <Text style={styles.infOwner}>{owner.city}</Text>
+                <Text style={styles.infOwner}>{owner.phone}</Text>
               </View>
             </View>
 
@@ -145,4 +191,15 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
   },
-})
+});
+
+const mapStyle = StyleSheet.create({
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+});

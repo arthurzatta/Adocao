@@ -14,7 +14,7 @@ const DescriptionPet = (({ navigation, route }) => {
   const [pet, setPet] = useState({});
   const [items, setItems] = useState([]);
   const [owner, setOwner] = useState({});
-
+  
   async function Details() {
     const { id } = route.params;
     const response = await api.get(`/pets/${id}`);
@@ -56,7 +56,7 @@ const DescriptionPet = (({ navigation, route }) => {
                 )
                 }
               </View>
-              <Text style={styles.subtitle}>Distancia</Text>
+              <Text style={styles.subtitle}>{route.params.distance}</Text>
             </View>
 
             <View style={styles.descriptionContainer}>

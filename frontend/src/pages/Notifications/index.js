@@ -36,7 +36,7 @@ const Notifications = ({navigation}) => {
         onEndReachedThershold={0.2}
         renderItem={({ item: notification }) => (
           <>
-            <TouchableOpacity style={styles.boxNotification} onPress={() => navigation.navigate('LostPet')}>
+            <TouchableOpacity style={styles.boxNotification} onPress={() => navigation.navigate('LostPet', {id: notification.pet_id, subtitle: notification.subtitle})}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                 {notification.type == 'create' ? (
                   <Icon name='dog' size={40} color={'#4B4B4B'} />
