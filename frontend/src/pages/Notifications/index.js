@@ -18,6 +18,7 @@ const Notifications = ({navigation}) => {
   }
 
   function changePage(notification){
+    console.log(notification)
     if(notification.type === "lost"){
       navigation.navigate('LostPet', {id: notification.pet_id, subtitle: notification.subtitle})
     }else{

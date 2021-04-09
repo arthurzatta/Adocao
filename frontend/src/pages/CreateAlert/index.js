@@ -16,11 +16,11 @@ export default function CreatePet({navigation}) {
   const user = useSelector(state => state.user.user);
 
   const [coordinates, setCoordinates] = useState({
-    latitude: Number(user.latitude), 
+    latitude: Number(user.latitude),
     longitude: Number(user.longitude)
   });
 
-  
+
   async function submitButton() {
     try {
       const { latitude, longitude } = coordinates;
@@ -47,7 +47,7 @@ export default function CreatePet({navigation}) {
     }
   }
 
-  
+
 
   return(
     <View style={styles.container}>
@@ -78,7 +78,7 @@ export default function CreatePet({navigation}) {
         />
 
         <TLabel>Carregue uma foto:</TLabel>
-        
+
 
         <View style={styles.radioContainer}>
           <TLabel>Sexo:</TLabel>

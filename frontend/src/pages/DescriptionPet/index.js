@@ -13,7 +13,7 @@ const DescriptionPet = (({ navigation, route }) => {
   const [distance, setDistance] = useState();
   const [items, setItems] = useState([]);
   const [owner, setOwner] = useState({});
-  
+
   async function Details() {
     const { id, dist: distance } = route.params;
     const response = await api.get(`/pets/${id}`);
@@ -29,11 +29,11 @@ const DescriptionPet = (({ navigation, route }) => {
   }, []);
 
   return (
-    <Background>
+    <>
       <ScrollView style={{ flex: 1 }} containerContentStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         <Icon name='arrow-back'
           onPress={() => navigation.navigate('Home')}
-          style={{ fontSize: 40, color: '#FFFFFF', paddingBottom: 60, paddingTop: 30, paddingLeft: 15 }}
+          style={{ fontSize: 40, color: '#FF93B5', paddingBottom: 60, paddingTop: 30, paddingLeft: 15 }}
         />
 
         <Container style={styles.box}>
@@ -116,7 +116,7 @@ const DescriptionPet = (({ navigation, route }) => {
           </View>
         </Container>
       </ScrollView>
-    </Background>
+    </>
   )
 });
 

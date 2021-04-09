@@ -1,15 +1,15 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../../Components/Header/index';
-import {View, ScrollView, StyleSheet, Text } from 'react-native';
-import  Icon  from 'react-native-vector-icons/MaterialIcons';
-import  IconIO  from 'react-native-vector-icons/Ionicons';
+import { View, ScrollView, StyleSheet, Text } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import IconIO from 'react-native-vector-icons/Ionicons';
 import { Container, IconContainer, IconButton, Img, UserImg, width } from './styles';
 import api from '../../services/api';
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
 import { parse, format, getHours } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 
-export default function LostPet({navigation, route}) {
+export default function LostPet({ navigation, route }) {
   const [pet, setPet] = useState({});
   const [owner, setOwner] = useState({});
   const [coordinates, setCoordinates] = useState({});
@@ -17,7 +17,7 @@ export default function LostPet({navigation, route}) {
   async function Details() {
     const { id } = route.params;
     const response = await api.get(`/lost/${id}`);
-    
+
     setCoordinates({
       latitude: Number(response.data.latitude),
       longitude: Number(response.data.longitude)
@@ -29,42 +29,40 @@ export default function LostPet({navigation, route}) {
   };
 
 
-  useEffect(() => { Details() },[]);
+  useEffect(() => { Details() }, []);
 
-  
-  return(
+
+  return (
     <>
-      <ScrollView style={{flex: 1}} containerContentStyle={{flexGrow:1}} showsVerticalScrollIndicator={false}>
-        <Header>
-          <Icon name='arrow-back'
-              onPress={() => navigation.navigate("Home")}
-              style={{ fontSize: 40, color: '#FFFFFF',paddingBottom: 60, paddingTop: 30}}
-          />
-        </Header>
+      <ScrollView style={{ flex: 1 }} containerContentStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+        <Icon name='arrow-back'
+          onPress={() => navigation.navigate("Home")}
+          style={{ fontSize: 40, color: '#FF93B5', paddingLeft: 20, paddingBottom: 60, paddingTop: 30 }}
+        />
         <Container style={styles.box}>
           {/* Image */}
           <View style={styles.image}>
-            <Img source={{uri: pet.image}} />
+            <Img source={{ uri: pet.image }} />
           </View>
 
           {/* FAB */}
           <IconContainer>
             <IconButton icon='message' color='rgba(95,169,61,1)' />
           </IconContainer>
-          
-          <View style={{margin: 20}}>
+
+          <View style={{ margin: 20 }}>
             {/* Pet Infos */}
             <View>
               <View style={styles.infos}>
                 <Text style={styles.title}>{pet.name}</Text>
                 {pet.sex === 'M' ? (
-                        < IconIO style={styles.icon} name='male'  color={'#78CEFF'} />
-                      ) : (
-                          <IconIO style={styles.icon} name='female' color={'#FF93B5'} />
-                        )
+                  < IconIO style={styles.icon} name='male' color={'#78CEFF'} />
+                ) : (
+                  <IconIO style={styles.icon} name='female' color={'#FF93B5'} />
+                )
                 }
               </View>
-              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={styles.subtitle}></Text>
                 <Text style={styles.subtitle}>{pet.createdAt}</Text>
               </View>
@@ -72,41 +70,41 @@ export default function LostPet({navigation, route}) {
 
             {/* Map */}
             <View style={styles.mapContainer}>
-                
-                <View style={mapStyle.container}>
-                  <MapView
-                    provider={PROVIDER_GOOGLE}
-                    style={mapStyle.map}
-                    region= {{
-                      latitude: coordinates.latitude,
-                      longitude: coordinates.longitude,
-                      latitudeDelta: 0.0922,
-                      longitudeDelta: 0.0421,
-                    }}
-                    rotateEnabled={false}
-                    zoomEnabled={true}
-                    scrollEnabled={true}
-                    showsTraffic={false}
-                    minZoomLevel={18}
-                  >
-                    <Circle
-                      center={coordinates}
-                      radius={10}
-                      strokeWidth={3}
-                      strokeColor={'#FF93B5'}
-                      fillColor={'rgba(255,147,181,0.5)'}
-                    />
-                    <Marker 
-                      coordinate={coordinates}
-                    />
-                  </MapView>
-                </View>
+
+              <View style={mapStyle.container}>
+                <MapView
+                  provider={PROVIDER_GOOGLE}
+                  style={mapStyle.map}
+                  region={{
+                    latitude: coordinates.latitude,
+                    longitude: coordinates.longitude,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                  }}
+                  rotateEnabled={false}
+                  zoomEnabled={true}
+                  scrollEnabled={true}
+                  showsTraffic={false}
+                  minZoomLevel={18}
+                >
+                  <Circle
+                    center={coordinates}
+                    radius={10}
+                    strokeWidth={3}
+                    strokeColor={'#FF93B5'}
+                    fillColor={'rgba(255,147,181,0.5)'}
+                  />
+                  <Marker
+                    coordinate={coordinates}
+                  />
+                </MapView>
+              </View>
             </View>
 
             {/* User Informations */}
-            <View style={{flexDirection: 'row' ,paddingTop: 10}}>
+            <View style={{ flexDirection: 'row', paddingTop: 10 }}>
               <View style={styles.userImage}>
-                <UserImg source={{uri: owner.image}}/>
+                <UserImg source={{ uri: owner.image }} />
               </View>
               <View>
                 <Text style={styles.nameOwner}>{owner.name}</Text>
@@ -127,7 +125,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: -40,
   },
-  title:{
+  title: {
     fontFamily: 'Ubuntu-Bold',
     fontSize: 24,
     color: '#4B4B4B',
@@ -151,9 +149,9 @@ const styles = StyleSheet.create({
     height: 350
   },
   mapContainerText: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingTop: 10, 
+    paddingTop: 10,
     paddingBottom: 10
   },
   lasTime: {
@@ -175,7 +173,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   image: {
-    width: width-40, 
+    width: width - 40,
     height: 369,
   },
   nameOwner: {
