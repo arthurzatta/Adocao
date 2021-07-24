@@ -1,0 +1,17 @@
+.formContainer{
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
+.textFieldContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.textfield{
+    margin-bottom: 35000
+}
+.btn-submit{
+    margin-bottom: 10;
+}

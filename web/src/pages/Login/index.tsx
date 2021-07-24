@@ -1,20 +1,25 @@
+import { TextField } from "@material-ui/core";
+import { Outlet, useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import { Button } from '../../components';
+import './index.css';
+
 const Login = () => {
-    
+
+    const navigate = useNavigate();
 
     return (
-        <div>
-            <form >
-                <div>
-                    <label>Email</label>
-                    <input type="text" placeholder="Insert Email" />
+        <div className='formContainer'>
+            <form>
+                <div className='textFieldContainer'>
+                    <TextField className='textfield' label="Email" />
+                    <TextField className='textfield' label="Password" />
+                    <Button className='btn-submit' type='submit' >Entrar</Button>
+                    <Button onClick={() => navigate('signUp')} >Cadastrar</Button>
                 </div>
-                <div>
-                    <label>Password</label>
-                    <input type="text" placeholder="Insert Password" />
-                </div>
-                <button type="submit" >Entrar</button>
             </form>
-        </div>
+            <Outlet />
+        </div >
     );
 }
 

@@ -1,50 +1,48 @@
-//Esse form provavelmente precisa ser modificado
-//Dar uma lida naquela biblioteca formik
-
+import { TextField, FormLabel, FormControl, FormControlLabel, RadioGroup, Radio } from "@material-ui/core";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { Button, MenuButton } from '../../components';
+import './index.css'
 
 const SignUp = (): any => {
+    const navigate = useNavigate();
+    const [isOng, setIsOng] = useState(false)
+
+    function submitAndRedirect(): void {
+        navigate('/');
+    }
+
     return (
         <div>
-            <form action="">
-                <div>
-                    <label>Nome:</label>
-                    <input type="text" />
-                </div>
+            <form >
+                <div className='form' >
+                    <TextField className='textfield' label="Nome" />
+                    <TextField className='textfield' label="Email" />
+                    <TextField className='textfield' label="Senha" />
+                    <TextField className='textfield' label="Telefone" />
+                    <div className='menu-buttons'>
+                        <MenuButton>Cidade</MenuButton>
+                        <MenuButton>Estado</MenuButton>
+                    </div>
 
-                <div>
-                    <label>Email:</label>
-                    <input type="text" />
-                </div>
+                    <div className='radio-group'>
+                        <FormControl component='fieldset' >
+                            <FormLabel component='legend'>Você é uma ong?</FormLabel>
+                            <RadioGroup aria-label='isOng'
+                                name='isOng'
+                                value={isOng}
+                                onChange={() => setIsOng(!isOng)}
+                                row
+                            >
+                                <FormControlLabel value={true} control={<Radio />} label="Male" />
+                                <FormControlLabel value={false} control={<Radio />} label="Female" />
+                            </RadioGroup>
+                        </FormControl>
+                    </div>
 
-                <div>
-                    <label>Número de Celular:</label>
-                    <input type="text" />
-                </div>
 
-                <div>
-                    <label>Estado:</label>
-                    <input type="text" />
+                    <Button type="submit" onClick={submitAndRedirect}>Cadastrar</Button>
                 </div>
-
-                <div>
-                    <label>Cidade:</label>
-                    <input type="text" />
-                </div>
-
-                <div>
-                    <label>Senha</label>
-                    <input type="text" />
-                </div>
-
-                <div>
-                    <p>Você é uma ong?</p>
-                    <label>Sim</label>
-                    <input type="text" />
-                    <label>Não</label>
-                    <input type="text" />
-                </div>
-
-                <button type="submit">Criar Conta</button>
             </form>
         </div>
     );

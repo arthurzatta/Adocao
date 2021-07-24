@@ -1,7 +1,7 @@
+import { Paper } from "@material-ui/core";
+
 export default function Profile() : any {
     return (
-        <div>
-            
-        </div>
+       <Paper>Profile</Paper>
     )
 }
