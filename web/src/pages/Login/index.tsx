@@ -15,7 +15,7 @@ const Login = () => {
                     <TextField className='textfield' label="Email" />
                     <TextField className='textfield' label="Password" />
                     <Button className='btn-submit' type='submit' >Entrar</Button>
-                    <Button onClick={() => navigate('signUp')} >Cadastrar</Button>
+                    <Button onClick={() => navigate('adoptions')} >Cadastrar</Button>
                 </div>
             </form>
             <Outlet />

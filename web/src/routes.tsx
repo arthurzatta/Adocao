@@ -5,17 +5,16 @@ export default function Routes(): any {
     const authenticated = true;
     const mainRoutes = {
         path: '/',
-        element: <Login />,
+        element: <Adoptions />,
         children: [
-            { path: 'adoptions', element: <Adoptions /> },
             { path: 'profile', element: <Profile /> },
             { path: 'alerts', element: <Alerts /> },
             // {path: '*', element: <Error/>}
         ]
     };
-
+    
     const otherRoutes = [
-        { path: '/', element: <Login /> },
+        { path: '/login', element: <Login /> },
         { path: 'signUp', element: <SignUp /> }
     ];
 
