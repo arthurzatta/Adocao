@@ -14,7 +14,7 @@ export default function Routes(): any {
     };
     
     const otherRoutes = [
-        { path: '/login', element: <Login /> },
+        { path: 'login', element: <Login /> },
         { path: 'signUp', element: <SignUp /> }
     ];
 
