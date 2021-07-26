@@ -1,0 +1,14 @@
+export enum petsActions {
+    PETS_CREATE = 'PETS_CREATE',
+    PETS_UPDATE = 'PETS_UPDATE',
+    PETS_READ = 'PETS_READ',
+    PETS_DELETE = 'PETS_DELETE',
+}
+
+export enum userActions {
+    USERS_CREATE = 'USERS_CREATE',
+    USERS_UPDATE = 'USERS_UPDATE',
+    USERS_READ = 'USERS_READ',
+    USERS_DELETE = 'USERS_DELETE',
+}
+
